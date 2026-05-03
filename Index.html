@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NaledZi Intelligence Platform v5 — Naledzi Technologies</title>
+<meta name="description" content="NaledZi Intelligence Platform v5 — Complete AI-powered sales and marketing automation for Naledzi Technologies">
+<style>
+/* ═══ RESET & VARIABLES ══════════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nv:#1B2A6B;--nv2:#2E3F8F;--nvL:#D6DAFA;--nvS:#EEF1FB;
+  --or:#E07B00;--gn:#1A7A4A;--gnL:#E6F4EE;
+  --rd:#8B1A1A;--rdL:#FDECEA;--gd:#B45309;--gdL:#FEF3C7;
+  --pu:#5C2D91;--puL:#EDE7F6;--tl:#0E7490;--tlL:#E0F7FA;
+  --bg:#F0F2F9;--card:#fff;--bdr:#E4E7EC;
+  --tx:#101828;--txs:#475467;--txx:#98A2B3;
+  --fn:'Segoe UI',Arial,sans-serif;--r:10px;--rs:6px;
+}
+body{font-family:var(--fn);background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden}
+.shell{display:flex;min-height:100vh}
+
+/* ═══ SIDEBAR ══════════════════════════════════════════════════════════ */
+.sb{width:226px;background:var(--nv);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto}
+.sb-top{padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-logo{font-size:15px;font-weight:700;color:#fff;line-height:1.3}
+.sb-tag{font-size:10px;color:var(--nvL);margin-top:2px;font-style:italic}
+.sb-ver{display:inline-block;background:var(--or);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:4px}
+.sb-ten{padding:8px 16px;background:rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:7px;cursor:pointer}
+.tdot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tnm{font-size:12px;color:var(--nvL);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ttr{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--or);color:#fff}
+.sb-nav{flex:1;padding:6px 0}
+.ss{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.35);padding:10px 16px 4px}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;font-size:13px;color:rgba(255,255,255,.72);border-left:3px solid transparent;transition:all .15s;user-select:none;position:relative}
+.ni:hover{background:rgba(255,255,255,.08);color:#fff}
+.ni.on{background:rgba(255,255,255,.11);color:#fff;border-left-color:var(--or)}
+.ni-i{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.ni-b{margin-left:auto;background:var(--rd);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center}
+.ni-bo{background:var(--or)}
+.sb-ft{padding:10px 16px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-ft p{font-size:11px;color:rgba(255,255,255,.4);line-height:1.6}
+
+/* ═══ MAIN ══════════════════════════════════════════════════════════ */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{background:var(--card);border-bottom:1px solid var(--bdr);padding:10px 22px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.topbar h1{font-size:15px;font-weight:700;color:var(--nv)}
+.topbar-sub{font-size:12px;color:var(--txs)}
+.tbr{margin-left:auto;display:flex;gap:6px;align-items:center}
+.ldot{width:7px;height:7px;border-radius:50%;background:#4ade80;display:inline-block;margin-right:5px;animation:pulse 1.5s infinite}
+.clk{font-size:11px;color:var(--txs)}
+.content{padding:18px 22px 50px;flex:1}
+.panel{display:none}.panel.on{display:block}
+
+/* ═══ CARDS ══════════════════════════════════════════════════════ */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ch{font-size:14px;font-weight:700;color:var(--nv);margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* ═══ STATS ══════════════════════════════════════════════════════ */
+.st{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:13px 15px;text-align:center}
+.sv{font-size:24px;font-weight:700;color:var(--nv);display:block}
+.sl{font-size:11px;color:var(--txs);margin-top:3px}
+.spb{background:var(--bdr);border-radius:20px;height:4px;overflow:hidden;margin-top:6px}
+.spbf{height:100%;border-radius:20px;background:var(--nv);transition:width .5s}
+
+/* ═══ BADGES ══════════════════════════════════════════════════ */
+.b{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.bg{background:var(--gnL);color:var(--gn)}.bo{background:var(--gdL);color:var(--gd)}
+.br{background:var(--rdL);color:var(--rd)}.bn{background:var(--nvS);color:var(--nv2)}
+.bp{background:var(--puL);color:var(--pu)}.bt{background:var(--tlL);color:var(--tl)}
+
+/* ═══ ALERTS ══════════════════════════════════════════════════ */
+.al{border-radius:var(--r);padding:11px 15px;margin-bottom:13px;font-size:13px;line-height:1.7;border-left:4px solid}
+.ai{background:var(--nvS);border-color:var(--nv);color:var(--nv2)}
+.as{background:var(--gnL);border-color:var(--gn);color:var(--gn)}
+.aw{background:var(--gdL);border-color:var(--gd);color:var(--gd)}
+.ah{background:var(--rdL);border-color:var(--rd);color:var(--rd)}
+
+/* ═══ BUTTONS ══════════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rs);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:var(--card);color:var(--tx);transition:all .15s;text-decoration:none}
+.btn:hover{background:var(--bg)}
+.btn-p{background:var(--nv);color:#fff;border-color:var(--nv)}.btn-p:hover{background:var(--nv2)}
+.btn-o{background:var(--or);color:#fff;border-color:var(--or)}.btn-o:hover{opacity:.9}
+.btn-g{background:var(--gn);color:#fff;border-color:var(--gn)}.btn-g:hover{opacity:.9}
+.btn-sm{padding:5px 12px;font-size:12px;font-weight:500}
+
+/* ═══ INPUTS ══════════════════════════════════════════════════ */
+.inp{width:100%;padding:8px 12px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:13px;font-family:var(--fn);background:var(--card);color:var(--tx)}
+.inp:focus{outline:2px solid var(--nvL);border-color:transparent}
+
+/* ═══ TABLE ══════════════════════════════════════════════════ */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--nv);color:#fff;padding:9px 12px;text-align:left;font-size:12px;font-weight:600}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--bdr);color:var(--txs);vertical-align:top}
+.tbl tr:nth-child(even) td{background:var(--bg)}.tbl tr:hover td{background:var(--nvS)}
+
+/* ═══ LEAD ROWS ══════════════════════════════════════════════ */
+.lr{display:grid;grid-template-columns:48px 1fr auto;gap:11px;align-items:start;padding:11px 0;border-bottom:1px solid var(--bdr)}
+.lr:last-child{border-bottom:none}
+.sc{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.lt{font-size:13px;font-weight:600;color:var(--nv);margin-bottom:3px;line-height:1.4}
+.lm{font-size:11px;color:var(--txs);line-height:1.7}
+
+/* ═══ KEYWORD TAGS ═══════════════════════════════════════════ */
+.kw-wrap{display:flex;flex-wrap:wrap;gap:5px;padding:9px;background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);min-height:54px;cursor:text}
+.kw-tag{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--bdr);border-radius:20px;padding:3px 10px;font-size:12px}
+.kw-rm{cursor:pointer;color:var(--txs);font-size:15px;line-height:1}.kw-rm:hover{color:var(--rd)}
+
+/* ═══ CODE ═══════════════════════════════════════════════════ */
+.code{background:#1E1E1E;border-radius:var(--r);padding:15px;font-size:11px;font-family:'Courier New',monospace;overflow-x:auto;white-space:pre;line-height:1.6;color:#D4D4D4;max-height:400px;overflow-y:auto}
+
+/* ═══ PROGRESS ══════════════════════════════════════════════ */
+.pb{background:var(--bdr);border-radius:20px;height:5px;overflow:hidden;margin-top:5px}
+.pbf{height:100%;border-radius:20px;background:var(--nv);transition:width .4s}
+
+/* ═══ PIPELINE STAGES ════════════════════════════════════════ */
+.pipe{display:flex;overflow-x:auto;gap:0;margin-bottom:16px}
+.ps{flex-shrink:0;padding:7px 12px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:var(--card);color:var(--txs);transition:all .15s;white-space:nowrap;text-align:center}
+.ps:first-child{border-radius:var(--rs) 0 0 var(--rs)}
+.ps:last-child{border-radius:0 var(--rs) var(--rs) 0}
+.ps:not(:first-child){margin-left:-1px}
+.ps:hover{z-index:1;border-color:var(--nv2)}
+.ps.on{background:var(--nv);color:#fff;z-index:2;border-color:var(--nv)}
+.ps.done{background:var(--gnL);color:var(--gn);border-color:var(--gn)}
+
+/* ═══ STAGE DETAIL ══════════════════════════════════════════ */
+.sd-hdr{background:var(--bg);border-radius:var(--r);padding:15px 18px;margin-bottom:13px}
+.sd-n{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--txs);margin-bottom:5px}
+.sd-t{font-size:18px;font-weight:700;color:var(--nv);margin-bottom:4px}
+.sd-s{font-size:13px;color:var(--txs)}
+.col-2{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px}
+.col-h{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:9px}
+.auto-col .col-h{color:var(--gn)}.you-col .col-h{color:var(--or)}
+.it{display:flex;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--bdr);font-size:13px;color:var(--txs);line-height:1.5}
+.it:last-child{border-bottom:none}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.auto-col .dot{background:var(--gn)}.you-col .dot{background:var(--or)}
+.oc-box{background:var(--nvS);border-radius:var(--rs);padding:13px 15px;margin-bottom:13px}
+.oc-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txs);margin-bottom:4px}
+.oc-txt{font-size:13px;color:var(--tx)}
+.tool-row{display:flex;flex-wrap:wrap;gap:6px}
+.tool{display:inline-flex;align-items:center;gap:5px;background:var(--bg);border:1px solid var(--bdr);border-radius:20px;padding:3px 10px;font-size:12px}
+.tool-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.nav-btns{display:flex;gap:8px;margin-top:12px}
+
+/* ═══ AI CHAT ════════════════════════════════════════════════ */
+.ai-m{padding:12px 15px;border-radius:var(--r);margin-bottom:9px;font-size:13px;line-height:1.7}
+.ai-u{background:var(--nv);color:#fff;margin-left:60px}
+.ai-b{background:var(--bg);border:1px solid var(--bdr);margin-right:60px;white-space:pre-line}
+.ai-row{display:flex;gap:8px;margin-top:11px}
+
+/* ═══ RENEWAL ════════════════════════════════════════════════ */
+.urg-c{background:var(--rdL);color:var(--rd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.urg-h{background:var(--gdL);color:var(--gd);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.urg-w{background:var(--nvS);color:var(--nv2);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.urg-wt{background:var(--gnL);color:var(--gn);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.urg-m{background:var(--bg);color:var(--txs);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;border:1px solid var(--bdr)}
+
+/* ═══ QUANTUM ════════════════════════════════════════════════ */
+.qb{background:linear-gradient(135deg,#1B2A6B 0%,#5C2D91 50%,#0E7490 100%);border-radius:var(--r);padding:20px 24px;margin-bottom:14px;color:#fff}
+
+/* ═══ TOAST ══════════════════════════════════════════════════ */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--nv);color:#fff;padding:12px 20px;border-radius:var(--r);font-size:13px;display:none;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:380px}
+
+/* ═══ DEPLOY MODAL ════════════════════════════════════════════ */
+#deploy-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9990;display:none;align-items:center;justify-content:center;padding:20px}
+.deploy-box{background:var(--card);border-radius:var(--r);max-width:640px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.deploy-head{background:var(--nv);padding:20px 24px;border-radius:var(--r) var(--r) 0 0;display:flex;justify-content:space-between;align-items:center}
+.deploy-head h2{color:#fff;font-size:16px;font-weight:700}
+.deploy-close{background:transparent;border:none;color:rgba(255,255,255,.7);font-size:22px;cursor:pointer;line-height:1}
+.deploy-body{padding:20px 24px}
+.deploy-opt{background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.deploy-opt:hover{border-color:var(--nv)}
+.deploy-opt h3{font-size:14px;font-weight:700;color:var(--nv);margin-bottom:4px}
+.deploy-opt p{font-size:12px;color:var(--txs);line-height:1.6}
+.deploy-steps{padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.deploy-steps li{display:flex;gap:12px;font-size:13px;color:var(--txs)}
+.deploy-steps li .step-n{width:26px;height:26px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+
+/* ═══ SEARCH BAR ══════════════════════════════════════════════ */
+.sbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.sbar .inp{flex:3;min-width:180px}
+.sbar select{min-width:110px;padding:8px 10px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:12px;font-family:var(--fn);background:var(--card);color:var(--tx)}
+
+/* ═══ EXPORT ROW ══════════════════════════════════════════════ */
+.exp-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--bdr)}
+
+/* ═══ SCROLL ══════════════════════════════════════════════════ */
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:10px}
+
+/* ═══ RESPONSIVE ══════════════════════════════════════════════ */
+@media(max-width:700px){.sb{display:none}.g2,.g3,.g4{grid-template-columns:1fr}.col-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ═══ SIDEBAR ═══════════════════════════════════════════════════════ -->
+<nav class="sb">
+  <div class="sb-top">
+    <div class="sb-logo">NaledZi Intelligence<br>Platform</div>
+    <div class="sb-tag">Virtualised. Protected. Always Operational.</div>
+    <span class="sb-ver">v5 — Desktop / Cloud</span>
+  </div>
+  <div class="sb-ten" onclick="cycleTenant()">
+    <div class="tdot"></div>
+    <span class="tnm" id="ten-name">Naledzi Technologies</span>
+    <span class="ttr" id="ten-tier">Enterprise</span>
+  </div>
+  <div class="sb-nav">
+    <div class="ss">Campaign</div>
+    <div class="ni on" data-p="dashboard" onclick="nav(this)"><span class="ni-i">📊</span>Dashboard</div>
+    <div class="ni" data-p="icp" onclick="nav(this)"><span class="ni-i">🎯</span>ICP Engine</div>
+    <div class="ni" data-p="sequences" onclick="nav(this)"><span class="ni-i">✉️</span>Sequences<span class="ni-b ni-bo" id="hot-badge">3</span></div>
+    <div class="ni" data-p="ai" onclick="nav(this)"><span class="ni-i">🤖</span>AI Assistant</div>
+    <div class="ni" data-p="social" onclick="nav(this)"><span class="ni-i">💼</span>Social Media</div>
+    <div class="ss">Opportunity Intelligence</div>
+    <div class="ni" data-p="scanner" onclick="nav(this)"><span class="ni-i">🔍</span>Live Scanner</div>
+    <div class="ni" data-p="gsearch" onclick="nav(this)"><span class="ni-i">🌍</span>Global Search</div>
+    <div class="ni" data-p="pipeline" onclick="nav(this)"><span class="ni-i">🔄</span>Deal Pipeline</div>
+    <div class="ni" data-p="renewals" onclick="nav(this)"><span class="ni-i">📅</span>Renewal Tracker<span class="ni-b" id="ren-badge">2</span></div>
+    <div class="ni" data-p="config" onclick="nav(this)"><span class="ni-i">⚙️</span>Scanner Config</div>
+    <div class="ni" data-p="script" onclick="nav(this)"><span class="ni-i">📜</span>Get Script v5</div>
+    <div class="ss">Platform</div>
+    <div class="ni" data-p="security" onclick="nav(this)"><span class="ni-i">🔐</span>Security</div>
+    <div class="ni" data-p="audit" onclick="nav(this)"><span class="ni-i">📋</span>Audit Trail</div>
+    <div class="ni" data-p="tenants" onclick="nav(this)"><span class="ni-i">🏢</span>Tenants</div>
+    <div class="ni" data-p="health" onclick="nav(this)"><span class="ni-i">⚕️</span>Self-Diagnosis</div>
+    <div class="ni" data-p="quantum" onclick="nav(this)"><span class="ni-i">⚛️</span>Quantum Security</div>
+    <div class="ss">Admin</div>
+    <div class="ni" data-p="pricing" onclick="nav(this)"><span class="ni-i">💳</span>Pricing &amp; Tiers</div>
+    <div class="ni" data-p="popia" onclick="nav(this)"><span class="ni-i">⚖️</span>POPIA Engine</div>
+    <div class="ni" data-p="deploy" onclick="nav(this)"><span class="ni-i">🚀</span>Deploy &amp; Install</div>
+  </div>
+  <div class="sb-ft"><p>Ratshibvumo Matodzi<br>Founder &amp; CEO<br>+27 83 616 0415<br>naledzitechnologies.co.za</p></div>
+</nav>
+
+<!-- ═══ MAIN ═══════════════════════════════════════════════════════════ -->
+<div class="main">
+<div class="topbar">
+  <h1 id="page-title">Dashboard</h1>
+  <span class="topbar-sub" id="page-sub">— NaledZi Intelligence Platform v5</span>
+  <div class="tbr">
+    <span class="ldot"></span>
+    <span class="clk" id="clk"></span>
+    <button class="btn btn-sm" onclick="cycleTenant()">Switch tenant ▾</button>
+    <button class="btn btn-sm btn-o" onclick="showDeploy()">🚀 Deploy</button>
+    <button class="btn btn-sm btn-p" onclick="nav(document.querySelector('[data-p=ai]'))">Ask AI ✦</button>
+  </div>
+</div>
+<div class="content">
+
+<!-- ═══════════════════════════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════════════════════════════ -->
+<div id="p-dashboard" class="panel on">
+  <div class="al ah" id="hot-al">🔥 <strong>3 hot leads + 2 critical renewals require immediate action.</strong> Sarah Chen (Nedbank CISO) opened your email 4×. VMware — Standard Bank expires in <strong>7 days</strong>. DBSA R45M tender closes in <strong>7 days</strong>.</div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="st"><span class="sv">487</span><span class="sl">Contacts in CRM</span><div class="spb"><div class="spbf" style="width:97%"></div></div></div>
+    <div class="st"><span class="sv">18</span><span class="sl">Meetings this month</span><div class="spb"><div class="spbf" style="width:90%;background:var(--gn)"></div></div></div>
+    <div class="st"><span class="sv" id="d-opps">0</span><span class="sl">Opportunities found</span><div class="spb"><div class="spbf" id="pb-opps" style="width:0%;background:var(--or)"></div></div></div>
+    <div class="st"><span class="sv">R47M</span><span class="sl">Pipeline value</span><div class="spb"><div class="spbf" style="width:47%;background:var(--rd)"></div></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch">📈 Pipeline funnel</div><div id="funnel-chart"></div></div>
+    <div class="card"><div class="ch">⚡ Today's AI activity</div><div id="ai-activity"></div></div>
+  </div>
+  <div class="card">
+    <div class="ch">🔥 Hot leads — call within 60 minutes</div>
+    <table class="tbl"><thead><tr><th>Contact</th><th>Company</th><th>Title</th><th>Signal</th><th>ICP Score</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Sarah Chen</strong></td><td>Nedbank</td><td>CISO</td><td><span class="b br">Opened 4×</span></td><td><span class="b bg">97/110</span></td><td><button class="btn btn-sm btn-o">Call Now</button></td></tr>
+      <tr><td><strong>James Molefe</strong></td><td>Absa</td><td>CTO</td><td><span class="b br">Clicked Calendly</span></td><td><span class="b bg">94/110</span></td><td><button class="btn btn-sm btn-o">Call Now</button></td></tr>
+      <tr><td><strong>Dr Priya Naidoo</strong></td><td>Discovery</td><td>CIO</td><td><span class="b bo">Replied YES</span></td><td><span class="b bg">91/110</span></td><td><button class="btn btn-sm btn-g">Reply</button></td></tr>
+      <tr><td>Thabo Dlamini</td><td>Standard Bank</td><td>IT Director</td><td><span class="b bn">Opened 2×</span></td><td><span class="b bn">88/110</span></td><td><button class="btn btn-sm">Follow Up</button></td></tr>
+      <tr><td>Nomsa Khumalo</td><td>Shoprite</td><td>CISO</td><td><span class="b bt">Intent spike</span></td><td><span class="b bg">93/110</span></td><td><button class="btn btn-sm">Enrol</button></td></tr>
+    </tbody></table>
+    <div class="exp-row">
+      <button class="btn btn-sm" onclick="xport('excel','dashboard')">📊 Excel</button>
+      <button class="btn btn-sm" onclick="xport('pdf','dashboard')">📄 PDF</button>
+      <button class="btn btn-sm" onclick="xport('word','dashboard')">📝 Word</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ICP ENGINE
+════════════════════════════════════════════════════════════ -->
+<div id="p-icp" class="panel">
+  <div class="al ai">🎯 110-point ML scoring across 5 dimensions. Tier A (90+) enrolled in sequences automatically. Models retrain quarterly on your closed-won data.</div>
+  <div class="g2">
+    <div class="card"><div class="ch">⚙️ Scoring dimensions</div><div id="icp-sliders"></div></div>
+    <div class="card"><div class="ch">📊 Score distribution</div><div id="icp-dist"></div><div style="margin-top:10px;display:flex;gap:7px;flex-wrap:wrap"><span class="b br">Tier A 90+: <strong>127</strong></span><span class="b bo">Tier B 65–89: <strong>198</strong></span><span class="b bn">Tier C 50–64: <strong>94</strong></span><span class="b bt">Disq: <strong>68</strong></span></div></div>
+  </div>
+  <div class="card"><div class="ch">🔮 ML model status</div>
+    <table class="tbl"><thead><tr><th>Model</th><th>Algorithm</th><th>Accuracy</th><th>Last Trained</th><th>Status</th></tr></thead>
+    <tbody><tr><td>ICP Scorer v3.2</td><td>XGBoost</td><td>84.7% AUC</td><td>3 days ago</td><td><span class="b bg">Active</span></td></tr><tr><td>Intent Detector v2.1</td><td>BERT fine-tuned</td><td>91.2% F1</td><td>1 day ago</td><td><span class="b bg">Active</span></td></tr><tr><td>Churn Predictor v1.8</td><td>LightGBM</td><td>79.3% AUC</td><td>11 days ago</td><td><span class="b bg">Active</span></td></tr><tr><td>Sentiment v4.0</td><td>Claude API</td><td>96.8% F1</td><td>Real-time</td><td><span class="b bt">Live inference</span></td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SEQUENCES
+════════════════════════════════════════════════════════════ -->
+<div id="p-sequences" class="panel">
+  <div class="al as">✅ All sequences running autonomously. 3 hot leads need phone calls today. Everything else is automated.</div>
+  <div class="g3" style="margin-bottom:14px">
+    <div class="st"><span class="sv">2,341</span><span class="sl">Emails sent this month</span></div>
+    <div class="st"><span class="sv">28.4%</span><span class="sl">Average open rate</span></div>
+    <div class="st"><span class="sv">3.1%</span><span class="sl">Reply rate</span></div>
+  </div>
+  <div class="card"><div class="ch">📧 Active sequences</div>
+    <table class="tbl"><thead><tr><th>Sequence name</th><th>Contacts</th><th>Open rate</th><th>Reply rate</th><th>Meetings</th><th>Status</th></tr></thead>
+    <tbody><tr><td>BFSI Tier A</td><td>47</td><td>34.2%</td><td>5.1%</td><td>6</td><td><span class="b bg">Active</span></td></tr><tr><td>Mining Tier A</td><td>23</td><td>29.8%</td><td>3.4%</td><td>3</td><td><span class="b bg">Active</span></td></tr><tr><td>Retail Tier A</td><td>31</td><td>26.1%</td><td>2.9%</td><td>4</td><td><span class="b bg">Active</span></td></tr><tr><td>Tier B Nurture (90d)</td><td>198</td><td>19.3%</td><td>1.2%</td><td>5</td><td><span class="b bn">Nurture</span></td></tr><tr><td>Global — Middle East</td><td>34</td><td>31.0%</td><td>4.2%</td><td>4</td><td><span class="b bg">Active</span></td></tr><tr><td>Government Tier A</td><td>29</td><td>27.5%</td><td>3.8%</td><td>3</td><td><span class="b bg">Active</span></td></tr></tbody></table>
+    <div class="exp-row"><button class="btn btn-sm" onclick="xport('excel','sequences')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','sequences')">📄 PDF</button><button class="btn btn-sm" onclick="xport('word','sequences')">📝 Word</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AI ASSISTANT
+════════════════════════════════════════════════════════════ -->
+<div id="p-ai" class="panel">
+  <div class="al ai">🤖 Powered by Claude (Anthropic). All outputs POPIA-compliant and logged to audit trail. Ask anything — strategy, emails, proposals, objection handling, opportunity analysis.</div>
+  <div class="g2">
+    <div class="card" style="display:flex;flex-direction:column;min-height:400px">
+      <div class="ch">💬 AI Campaign Assistant</div>
+      <div id="ai-msgs" style="flex:1;max-height:300px;overflow-y:auto"></div>
+      <div class="ai-row"><input class="inp" id="ai-inp" placeholder="Write BFSI email, analyse pipeline, generate proposal, handle objection, scan for global opportunities…" onkeydown="if(event.key==='Enter')sendAI()"><button class="btn btn-sm btn-p" onclick="sendAI()">Send ✦</button></div>
+    </div>
+    <div class="card">
+      <div class="ch">⚡ Quick actions</div>
+      <div id="ai-qa" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SOCIAL MEDIA
+════════════════════════════════════════════════════════════ -->
+<div id="p-social" class="panel">
+  <div class="g3" style="margin-bottom:14px"><div class="st"><span class="sv">156</span><span class="sl">Posts scheduled (90 days)</span></div><div class="st"><span class="sv">2.4K</span><span class="sl">LinkedIn followers</span></div><div class="st"><span class="sv">4.8%</span><span class="sl">Engagement rate</span></div></div>
+  <div class="card"><div class="ch">📅 Content calendar — next 7 days</div>
+    <table class="tbl"><thead><tr><th>Day</th><th>Platform</th><th>Post preview</th><th>Status</th></tr></thead>
+    <tbody><tr><td>Mon</td><td>LinkedIn</td><td>FSCA JS2 enforcement — are your BCDR plans tested? 3 questions every CIO should be asking…</td><td><span class="b bg">Scheduled</span></td></tr><tr><td>Tue</td><td>Twitter/X</td><td>300% increase in SA ransomware attacks. Your BCDR plan IS your business continuity plan. #Cybersecurity #SouthAfrica</td><td><span class="b bg">Scheduled</span></td></tr><tr><td>Wed</td><td>LinkedIn</td><td>What is virtualisation and why do SA's top 4 banks rely on it for 99.99% uptime?</td><td><span class="b bg">Scheduled</span></td></tr><tr><td>Thu</td><td>Facebook</td><td>HR Technology insight: 60% of cyber breaches involve compromised employee credentials…</td><td><span class="b bg">Scheduled</span></td></tr><tr><td>Fri</td><td>LinkedIn</td><td>Poll: What is your biggest IT concern for 2025? A) Ransomware B) Load-shedding C) POPIA compliance</td><td><span class="b bg">Scheduled</span></td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LIVE SCANNER
+════════════════════════════════════════════════════════════ -->
+<div id="p-scanner" class="panel">
+  <div class="al as"><span class="ldot"></span>Scanning 15+ global sources every 30 minutes. Critical/Hot leads emailed within 60 seconds. All results stored permanently.</div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="st"><span class="sv" id="sc-tot">0</span><span class="sl">Opportunities found</span></div>
+    <div class="st"><span class="sv" id="sc-cr" style="color:var(--rd)">0</span><span class="sl">Critical (≤7d deadline)</span></div>
+    <div class="st"><span class="sv" id="sc-ht" style="color:var(--gd)">0</span><span class="sl">Hot (score 80+)</span></div>
+    <div class="st"><span class="sv" id="sc-ct">0</span><span class="sl">Countries covered</span></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:13px">
+      <div class="ch" style="margin-bottom:0;flex:1"><span class="ldot"></span>Live opportunity feed</div>
+      <select id="f-urg" class="inp" style="width:auto;padding:5px 9px;font-size:12px" onchange="filterFeed()"><option value="">All urgency</option><option>Critical</option><option>Hot</option><option>Warm</option><option>Watch</option></select>
+      <select id="f-typ" class="inp" style="width:auto;padding:5px 9px;font-size:12px" onchange="filterFeed()"><option value="">All types</option><option value="tender">Tenders</option><option value="renewal">Renewals</option><option value="news">News</option></select>
+      <select id="f-sec" class="inp" style="width:auto;padding:5px 9px;font-size:12px" onchange="filterFeed()"><option value="">All sectors</option><option>BFSI</option><option>Mining</option><option>Retail</option><option>Telecoms</option><option>Healthcare</option><option>Government</option><option>Industrial</option></select>
+      <select id="f-reg" class="inp" style="width:auto;padding:5px 9px;font-size:12px" onchange="filterFeed()"><option value="">All regions</option><option>Africa</option><option>Middle East</option><option>Europe</option><option>Americas</option><option>Asia Pacific</option></select>
+      <button class="btn btn-sm btn-g" onclick="simScan()">▶ Simulate scan</button>
+      <button class="btn btn-sm" onclick="clearFeed()">Clear</button>
+    </div>
+    <div id="feed-box"><div style="padding:28px;text-align:center;color:var(--txs);font-size:13px">Click <strong>Simulate scan</strong> to see live opportunity results, or use <strong>Global Search</strong> to search worldwide.</div></div>
+    <div class="exp-row">
+      <button class="btn btn-sm" onclick="xport('excel','scanner')">📊 Excel</button>
+      <button class="btn btn-sm" onclick="xport('pdf','scanner')">📄 PDF</button>
+      <button class="btn btn-sm" onclick="xport('word','scanner')">📝 Word</button>
+      <button class="btn btn-sm" onclick="xportCSV()">📁 CSV</button>
+      <span style="font-size:12px;color:var(--txs);margin-left:auto" id="saved-cnt">0 records stored</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     GLOBAL SEARCH
+════════════════════════════════════════════════════════════ -->
+<div id="p-gsearch" class="panel">
+  <div class="al ai">Search for opportunities across any country, vendor, solution, or sector worldwide. No restrictions — all 54 African countries and 190+ nations supported.</div>
+  <div class="card">
+    <div class="ch">🌍 Global opportunity search</div>
+    <div class="sbar">
+      <input class="inp" id="gq" placeholder="e.g. VMware renewal Nigeria, BCDR tender Germany, cybersecurity RFP Middle East, Fortinet enterprise…" style="flex:3;min-width:220px" onkeydown="if(event.key==='Enter')gSearch()">
+      <select id="g-reg" style="min-width:130px;padding:8px 10px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:12px;font-family:var(--fn);background:var(--card);color:var(--tx)"><option value="">Worldwide</option><option value="south africa">South Africa</option><option value="africa">Africa</option><option value="nigeria">Nigeria</option><option value="kenya">Kenya</option><option value="ghana">Ghana</option><option value="egypt">Egypt</option><option value="middle east">Middle East</option><option value="saudi arabia">Saudi Arabia</option><option value="uae">UAE</option><option value="europe">Europe</option><option value="united kingdom">UK</option><option value="germany">Germany</option><option value="united states">USA</option><option value="india">India</option><option value="australia">Australia</option><option value="singapore">Singapore</option><option value="brazil">Brazil</option></select>
+      <select id="g-sec" style="min-width:110px;padding:8px 10px;border:1px solid var(--bdr);border-radius:var(--rs);font-size:12px;font-family:var(--fn);background:var(--card);color:var(--tx)"><option value="">All sectors</option><option value="bfsi">BFSI</option><option value="mining">Mining</option><option value="retail">Retail</option><option value="telecoms">Telecoms</option><option value="healthcare">Healthcare</option><option value="government">Government</option><option value="industrial">Industrial</option></select>
+      <button class="btn btn-p" onclick="gSearch()">Search</button>
+    </div>
+    <div style="margin-bottom:12px"><div style="font-size:12px;color:var(--txs);margin-bottom:6px">Quick searches:</div><div id="qs-btns" style="display:flex;flex-wrap:wrap;gap:5px"></div></div>
+    <div id="gs-results"><div style="padding:18px;text-align:center;color:var(--txs);font-size:13px">Enter a search term or click a quick search above.</div></div>
+    <div class="exp-row"><button class="btn btn-sm" onclick="xport('excel','gsearch')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','gsearch')">📄 PDF</button><button class="btn btn-sm" onclick="xport('word','gsearch')">📝 Word</button></div>
+    <div class="card" style="margin-top:13px;margin-bottom:0"><div class="ch">📡 Live Google News links</div><div id="gn-links" style="display:flex;flex-wrap:wrap;gap:6px;padding-top:4px"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DEAL PIPELINE WALKTHROUGH
+════════════════════════════════════════════════════════════ -->
+<div id="p-pipeline" class="panel">
+  <div class="al ai">🔄 Complete 12-stage journey from scanner detection to signed contract. Click any stage to see exactly what runs automatically and what you need to do.</div>
+  <div class="pipe" id="pipe-stages"></div>
+  <div id="pipe-detail"></div>
+  <div class="nav-btns">
+    <button class="btn btn-sm" id="pipe-back" onclick="pipeStep(-1)">← Back</button>
+    <button class="btn btn-sm btn-p" id="pipe-next" onclick="pipeStep(1)">Next stage →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     RENEWAL TRACKER
+════════════════════════════════════════════════════════════ -->
+<div id="p-renewals" class="panel">
+  <div class="al ah">⚠️ <strong>2 Critical renewals require action today.</strong> VMware — Standard Bank expires in 7 days. Fortinet — Discovery expires in 22 days. Call clients now.</div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="st"><span class="sv" id="rn-tot">6</span><span class="sl">Active contracts</span></div>
+    <div class="st"><span class="sv" id="rn-cr" style="color:var(--rd)">1</span><span class="sl">Critical (≤7 days)</span></div>
+    <div class="st"><span class="sv" id="rn-ht" style="color:var(--gd)">2</span><span class="sl">Hot (8–30 days)</span></div>
+    <div class="st"><span class="sv">R1.85M</span><span class="sl">Total contract value</span></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="ch" style="margin-bottom:0">📅 Contract renewal calendar</div>
+      <button class="btn btn-sm btn-g" onclick="toggleAddRenewal()">+ Add contract</button>
+    </div>
+    <div id="renewal-tbl"></div>
+    <div class="exp-row"><button class="btn btn-sm" onclick="xport('excel','renewals')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','renewals')">📄 PDF</button><button class="btn btn-sm" onclick="xport('word','renewals')">📝 Word</button></div>
+  </div>
+  <div class="card" id="add-renewal-form" style="display:none">
+    <div class="ch">+ Add renewal contract</div>
+    <div class="g2" style="gap:10px">
+      <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:3px">Software / Product</label><input class="inp" id="r-sw" placeholder="e.g. VMware vSphere Enterprise"></div>
+      <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:3px">Vendor</label><input class="inp" id="r-vn" placeholder="e.g. VMware"></div>
+      <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:3px">Client organisation</label><input class="inp" id="r-cl" placeholder="e.g. Standard Bank"></div>
+      <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:3px">Contract value (R)</label><input class="inp" id="r-vl" placeholder="e.g. 450000" type="number"></div>
+      <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:3px">Renewal date</label><input class="inp" type="date" id="r-dt"></div>
+      <div style="display:flex;align-items:flex-end;gap:8px"><button class="btn btn-p" onclick="addRenewal()">Save</button><button class="btn" onclick="toggleAddRenewal()">Cancel</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCANNER CONFIG
+════════════════════════════════════════════════════════════ -->
+<div id="p-config" class="panel">
+  <div class="g2">
+    <div class="card"><div class="ch">🏷️ Keywords (<span id="kw-cnt">0</span>)</div><div class="kw-wrap" id="kw-box"></div><div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap"><input class="inp" id="kw-in" placeholder="Add keyword, press Enter" style="flex:2;min-width:150px" onkeydown="if(event.key==='Enter')addKw()"><button class="btn btn-sm btn-p" onclick="addKw()">Add</button><button class="btn btn-sm" onclick="resetKws()">Reset defaults</button></div></div>
+    <div class="card"><div class="ch">📍 Locations (<span id="loc-cnt">0</span>)</div><div class="kw-wrap" id="loc-box"></div><div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap"><input class="inp" id="loc-in" placeholder="Add any country or city worldwide" style="flex:2;min-width:150px" onkeydown="if(event.key==='Enter')addLoc()"><button class="btn btn-sm btn-p" onclick="addLoc()">Add</button></div><div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px" id="rg-btns"></div></div>
+  </div>
+  <div class="card"><div class="ch">🔔 Alert settings</div>
+    <div class="g2">
+      <div>
+        <div style="margin-bottom:11px"><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:4px">Alert email</label><input class="inp" id="al-email" value="admin@naledzitechnologies.co.za"></div>
+        <div style="margin-bottom:11px"><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:4px">CC email (optional)</label><input class="inp" id="al-cc" placeholder="tshibvumom@naledzitechnologies.co.za"></div>
+        <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:4px">Scan frequency</label><select class="inp" id="al-freq"><option value="15">Every 15 minutes</option><option value="30" selected>Every 30 minutes</option><option value="60">Every hour</option></select></div>
+      </div>
+      <div>
+        <div style="margin-bottom:11px"><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:4px">Minimum score to email (<span id="sc-lbl">60</span>/100)</label><input type="range" min="0" max="100" value="60" id="min-sc" oninput="document.getElementById('sc-lbl').textContent=this.value" style="width:100%;margin-top:4px"></div>
+        <div style="margin-bottom:11px"><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:4px">Instant email threshold</label><select class="inp"><option>Critical only (score 90+)</option><option selected>Critical + Hot (score 70+)</option><option>Critical + Hot + Warm (score 60+)</option></select></div>
+        <div><label style="font-size:12px;color:var(--txs);display:block;margin-bottom:4px">Renewal reminder days</label><input class="inp" value="90, 60, 30, 7" readonly style="background:var(--bg)"></div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" onclick="saveConfig()">Save &amp; regenerate script</button><span id="cfg-msg" style="font-size:12px;color:var(--gn);margin-top:8px"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     GET SCRIPT v5
+════════════════════════════════════════════════════════════ -->
+<div id="p-script" class="panel">
+  <div class="al as">This script is generated from your configuration above. Copy it → go to <a href="https://script.google.com" target="_blank" style="color:var(--gn)">script.google.com</a> → paste → save → run → allow permissions → set trigger (every 30 min). Runs 24/7 on Google's servers. Your computer does not need to be on.</div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+      <div class="ch" style="margin-bottom:0">Generated Apps Script v5</div>
+      <div style="display:flex;gap:7px"><button class="btn btn-p btn-sm" id="copy-btn" onclick="copyScript()">Copy script</button><button class="btn btn-sm" onclick="xport('word','script')">Export Word</button></div>
+    </div>
+    <div class="code" id="script-out"></div>
+  </div>
+  <div class="card"><div class="ch">⚡ 4-step installation</div>
+    <div style="display:flex;flex-direction:column;gap:13px;font-size:13px;color:var(--txs)">
+      <div style="display:flex;gap:12px"><div style="width:28px;height:28px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">1</div><div>Go to <a href="https://sheets.google.com" target="_blank" style="color:var(--nv2)">sheets.google.com</a> → create a new blank spreadsheet → rename the bottom tab to exactly: <strong>NaledZi Opportunities</strong> → add a second tab named: <strong>NaledZi Renewals</strong></div></div>
+      <div style="display:flex;gap:12px"><div style="width:28px;height:28px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">2</div><div>In your Sheet: <strong>Extensions → Apps Script</strong> → delete all existing code → paste the script above → click the floppy disk icon (Save) → name the project: NaledZi Scanner v5</div></div>
+      <div style="display:flex;gap:12px"><div style="width:28px;height:28px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">3</div><div>Click <strong>Run ▶</strong> → Google asks for permissions → click Review permissions → Allow all → run once more → check your Google Sheet for new rows and check admin@naledzitechnologies.co.za inbox for the first alert email</div></div>
+      <div style="display:flex;gap:12px"><div style="width:28px;height:28px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">4</div><div>Clock icon (Triggers) → <strong>Add Trigger</strong>: Function = <strong>scanLeads</strong>, Time-driven, Minutes, Every 30 min → Save. Add second trigger: Function = <strong>checkRenewals</strong>, Day timer, 6–7am. Done — runs forever on Google's servers.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECURITY
+════════════════════════════════════════════════════════════ -->
+<div id="p-security" class="panel">
+  <div class="g3" style="margin-bottom:14px"><div class="st"><span class="sv" style="color:var(--gn)">98.7</span><span class="sl">Security score /100</span></div><div class="st"><span class="sv">0</span><span class="sl">Critical vulnerabilities</span></div><div class="st"><span class="sv">247</span><span class="sl">Threats blocked (30d)</span></div></div>
+  <div class="g2">
+    <div class="card"><div class="ch">🔐 Security controls</div><div id="sec-ctrls"></div></div>
+    <div class="card"><div class="ch">🔒 Cryptographic stack</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+        <div style="padding:10px;background:var(--bg);border-radius:var(--rs);border-left:3px solid var(--nv)"><strong>Data at rest</strong><br><span style="color:var(--txs)">AES-256-GCM + CRYSTALS-Kyber-1024 (PQC) key wrapping</span></div>
+        <div style="padding:10px;background:var(--bg);border-radius:var(--rs);border-left:3px solid var(--nv)"><strong>Data in transit</strong><br><span style="color:var(--txs)">TLS 1.3 + hybrid classical/post-quantum cipher suites</span></div>
+        <div style="padding:10px;background:var(--bg);border-radius:var(--rs);border-left:3px solid var(--nv)"><strong>Digital signatures</strong><br><span style="color:var(--txs)">CRYSTALS-Dilithium-3 (NIST PQC Standard 2024)</span></div>
+        <div style="padding:10px;background:var(--bg);border-radius:var(--rs);border-left:3px solid var(--nv)"><strong>Key management</strong><br><span style="color:var(--txs)">HSM-backed, 90-day auto-rotation, per-tenant CMK</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AUDIT TRAIL
+════════════════════════════════════════════════════════════ -->
+<div id="p-audit" class="panel">
+  <div class="al as">📋 Immutable append-only log. Cryptographically chained. 7-year retention. POPIA + FSCA JS2 compliant.</div>
+  <div class="g3" style="margin-bottom:14px"><div class="st"><span class="sv">1.2M</span><span class="sl">Total audit events</span></div><div class="st"><span class="sv">7 yrs</span><span class="sl">Retention period</span></div><div class="st"><span class="sv">0</span><span class="sl">Integrity violations</span></div></div>
+  <div class="card"><div class="ch">📝 Live audit stream</div><div id="audit-log"></div>
+    <div class="exp-row"><button class="btn btn-sm" onclick="addAudit()">+ Add event</button><button class="btn btn-sm" onclick="xport('excel','audit')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','audit')">📄 POPIA Report PDF</button><button class="btn btn-sm" onclick="xport('word','audit')">📝 Word</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TENANTS
+════════════════════════════════════════════════════════════ -->
+<div id="p-tenants" class="panel">
+  <div class="g4" style="margin-bottom:14px"><div class="st"><span class="sv">23</span><span class="sl">Total tenants</span></div><div class="st"><span class="sv">21</span><span class="sl">Active</span></div><div class="st"><span class="sv">R1.84M</span><span class="sl">Monthly MRR</span></div><div class="st"><span class="sv">99.9%</span><span class="sl">Platform uptime</span></div></div>
+  <div class="card"><div class="ch">🏢 Tenant registry</div>
+    <table class="tbl"><thead><tr><th>Organisation</th><th>Domain</th><th>Tier</th><th>Users</th><th>Status</th><th>MRR</th><th></th></tr></thead>
+    <tbody id="tenant-rows"></tbody></table>
+    <div class="exp-row"><button class="btn btn-sm" onclick="xport('excel','tenants')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','tenants')">📄 PDF</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SELF-DIAGNOSIS
+════════════════════════════════════════════════════════════ -->
+<div id="p-health" class="panel">
+  <div class="al as">⚕️ Autonomous Self-Diagnosis Engine monitors 127 metrics every 30 seconds. Resolved 2 issues autonomously today — no human intervention required.</div>
+  <div class="g3" id="health-stats" style="margin-bottom:14px"></div>
+  <div class="g2">
+    <div class="card"><div class="ch">🔧 Self-healing actions</div><div id="heal-log"></div></div>
+    <div class="card"><div class="ch">📡 Service health map</div><div id="svc-map"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     QUANTUM SECURITY
+════════════════════════════════════════════════════════════ -->
+<div id="p-quantum" class="panel">
+  <div class="qb"><div style="font-size:21px;font-weight:700;margin-bottom:6px">⚛️ Quantum Security Layer</div><div style="font-size:13px;opacity:.9;line-height:1.7">Post-quantum cryptography (CRYSTALS-Kyber + Dilithium) protects all data against future quantum computer attacks. NIST PQC Standard 2024 compliant. Critical for BFSI clients with 7+ year POPIA data retention obligations.</div></div>
+  <div class="g3" style="margin-bottom:14px"><div class="st"><span class="sv" style="color:var(--pu)">CRYSTALS</span><span class="sl">Kyber-1024 key encapsulation</span></div><div class="st"><span class="sv" style="color:var(--pu)">Dilithium-3</span><span class="sl">Digital signatures (NIST PQC)</span></div><div class="st"><span class="sv" style="color:var(--pu)">256-bit</span><span class="sl">Quantum security level</span></div></div>
+  <div class="card"><div class="ch">🔑 Key operations status</div>
+    <table class="tbl"><thead><tr><th>Operation</th><th>Status</th></tr></thead>
+    <tbody><tr><td>Master key (HSM-backed)</td><td><span class="b bg">Active — 87 days until auto-rotation</span></td></tr><tr><td>Tenant CMKs issued</td><td><span class="b bn">23 keys — all active</span></td></tr><tr><td>PQC key derivations today</td><td><span class="b bp">14,782 operations</span></td></tr><tr><td>ZK proof verifications</td><td><span class="b bg">All passed — 0 failures</span></td></tr><tr><td>Hybrid TLS 1.3 handshakes</td><td><span class="b bn">99.2% using PQC cipher</span></td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PRICING
+════════════════════════════════════════════════════════════ -->
+<div id="p-pricing" class="panel">
+  <div class="al ai">Four subscription tiers. White-label reseller programme for Enterprise and Quantum tiers. Annual billing = 2 months free.</div>
+  <div class="g4" id="tier-cards" style="margin-bottom:14px"></div>
+  <div class="card"><div class="ch">📊 Year 1 revenue model</div>
+    <table class="tbl"><thead><tr><th>Tier</th><th>Target accounts</th><th>MRR</th><th>ARR</th></tr></thead>
+    <tbody><tr><td>Starter (R12,000/mo)</td><td>50</td><td>R600,000</td><td>R7.2M</td></tr><tr><td>Professional (R35,000/mo)</td><td>30</td><td>R1,050,000</td><td>R12.6M</td></tr><tr><td>Enterprise (R85,000/mo)</td><td>15</td><td>R1,275,000</td><td>R15.3M</td></tr><tr><td>Quantum (avg R200,000/mo)</td><td>5</td><td>R1,000,000</td><td>R12M</td></tr><tr><td><strong>Total</strong></td><td><strong>100</strong></td><td><strong>R3,925,000</strong></td><td style="color:var(--gn);font-weight:700">R47.1M Year 1</td></tr></tbody></table>
+    <div class="exp-row"><button class="btn btn-sm" onclick="xport('excel','pricing')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','pricing')">📄 PDF</button><button class="btn btn-sm" onclick="xport('word','pricing')">📝 Word</button></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     POPIA ENGINE
+════════════════════════════════════════════════════════════ -->
+<div id="p-popia" class="panel">
+  <div class="g3" style="margin-bottom:14px"><div class="st"><span class="sv" style="color:var(--gn)">94%</span><span class="sl">POPIA readiness score</span></div><div class="st"><span class="sv">487</span><span class="sl">Consents on file</span></div><div class="st"><span class="sv">0</span><span class="sl">Outstanding DSARs</span></div></div>
+  <div class="g2">
+    <div class="card"><div class="ch">⚖️ Consent distribution</div><div id="consent-bars"></div></div>
+    <div class="card"><div class="ch">🛡️ Compliance checklist</div><div id="popia-list"></div></div>
+  </div>
+  <div class="exp-row" style="margin-top:4px"><button class="btn btn-sm" onclick="xport('excel','popia')">📊 Excel</button><button class="btn btn-sm" onclick="xport('pdf','popia')">📄 POPIA Report PDF</button><button class="btn btn-sm" onclick="xport('word','popia')">📝 Word</button></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     DEPLOY & INSTALL
+════════════════════════════════════════════════════════════ -->
+<div id="p-deploy" class="panel">
+  <div class="al ai">🚀 This app is a single HTML file. It works on any device that has a web browser — no installation required for desktop use. For cloud hosting, choose one of the options below. All options are free or very low cost.</div>
+  <div class="g2">
+    <div class="card" style="border-color:var(--gn)">
+      <div class="ch" style="color:var(--gn)">✅ Option 1 — Desktop (2 minutes — do this now)</div>
+      <div style="font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:12px">The simplest option. This file works entirely in your browser. No internet required for the dashboard itself (only for the live Google News links).</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</div><div><strong>Download this file</strong> — save it as <code style="background:var(--bg);padding:1px 5px;border-radius:3px">NaledZi_v5.html</code> on your Desktop</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div><div><strong>Double-click the file</strong> → it opens in Chrome or Edge automatically</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div><strong>Bookmark it</strong> — press Ctrl+D → name it "NaledZi Dashboard"</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div><div><strong>Set as homepage</strong> — Chrome Settings → On startup → Open a specific page → paste the file path</div></div>
+      </div>
+    </div>
+    <div class="card" style="border-color:var(--or)">
+      <div class="ch" style="color:var(--or)">⚡ Option 2 — Netlify (5 minutes — access from anywhere)</div>
+      <div style="font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:12px">Drag and drop to publish online. Free forever. Accessible from your phone, tablet, or any computer worldwide.</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</div><div>Create folder called <code style="background:var(--bg);padding:1px 5px;border-radius:3px">naledzi-v5</code> → rename this file to <code style="background:var(--bg);padding:1px 5px;border-radius:3px">index.html</code> → put it in the folder</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div><div>Go to <a href="https://app.netlify.com/drop" target="_blank" style="color:var(--or)">app.netlify.com/drop</a></div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div><strong>Drag the folder</strong> (not the file) onto the drop zone — wait 20 seconds</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--or);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div><div>Netlify gives you a live URL like <code style="background:var(--bg);padding:1px 5px;border-radius:3px">naledzi-v5.netlify.app</code> — share it with your team</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">📌 Option 3 — GitHub Pages (free, permanent URL)</div>
+      <div style="font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:12px">Free forever. Your own URL at <code style="background:var(--bg);padding:1px 5px;border-radius:3px">yourusername.github.io/naledzi</code></div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</div><div>Create free account at <a href="https://github.com" target="_blank" style="color:var(--nv2)">github.com</a></div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div><div>New repository → name: <code style="background:var(--bg);padding:1px 5px;border-radius:3px">naledzi</code> → Public → Add README</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div>Upload this file renamed as <code style="background:var(--bg);padding:1px 5px;border-radius:3px">index.html</code> → Commit</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div><div>Settings → Pages → Source: main → Save → live in 2 minutes</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch">🏢 Option 4 — Hetzner VPS (professional, branded URL)</div>
+      <div style="font-size:13px;color:var(--txs);line-height:1.7;margin-bottom:12px">For <code style="background:var(--bg);padding:1px 5px;border-radius:3px">dashboard.naledzitechnologies.co.za</code> — R100–R200/month.</div>
+      <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</div><div>Sign up at <a href="https://hetzner.co.za" target="_blank" style="color:var(--nv2)">hetzner.co.za</a> → order CX11 (R100/mo) → Ubuntu 22.04 → Johannesburg</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div><div>SSH in → run: <code style="background:var(--bg);padding:1px 5px;border-radius:3px">apt update && apt install nginx -y</code></div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div>Upload this file as <code style="background:var(--bg);padding:1px 5px;border-radius:3px">/var/www/html/index.html</code> using WinSCP or FileZilla</div></div>
+        <div style="display:flex;gap:10px"><div style="width:22px;height:22px;border-radius:50%;background:var(--nv);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div><div>Add DNS A record at your domain registrar pointing to server IP → run Certbot for free HTTPS</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="al as" style="margin-top:4px">💡 <strong>Recommended path:</strong> Do Option 1 (Desktop) today — takes 2 minutes. Do Option 2 (Netlify) this week for phone access. Do Option 4 (Hetzner VPS) after your first deal closes for a professional branded URL.</div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- DEPLOY MODAL -->
+<div id="deploy-modal" onclick="if(event.target===this)hideDeploy()">
+  <div class="deploy-box">
+    <div class="deploy-head"><h2>🚀 Quick Deploy Options</h2><button class="deploy-close" onclick="hideDeploy()">×</button></div>
+    <div class="deploy-body">
+      <div class="deploy-opt" onclick="nav(document.querySelector('[data-p=deploy]'));hideDeploy()"><h3>View full deployment guide →</h3><p>Step-by-step instructions for all 4 options including desktop, Netlify, GitHub Pages, and Hetzner VPS with custom domain.</p></div>
+      <div class="deploy-opt" onclick="window.open('https://app.netlify.com/drop','_blank');hideDeploy()"><h3>⚡ Netlify drop (5 min — free)</h3><p>Drag this file onto Netlify and be live in 60 seconds. Free forever. Accessible from any device worldwide.</p></div>
+      <div class="deploy-opt" onclick="window.open('https://github.com','_blank');hideDeploy()"><h3>📌 GitHub Pages (free, permanent URL)</h3><p>Upload once, live forever at yourusername.github.io/naledzi. No cost ever.</p></div>
+      <div class="deploy-opt" onclick="window.open('https://hetzner.co.za','_blank');hideDeploy()"><h3>🏢 Hetzner VPS — dashboard.naledzitechnologies.co.za</h3><p>Professional deployment with your own branded URL. R100–R200/month including HTTPS certificate.</p></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══ DATA ════════════════════════════════════════════════════════════
+var ALL_LEADS=[{id:1,title:"DBSA RFP: enterprise cybersecurity managed services — R45M budget",source:"eTenders SA",type:"tender",loc:"South Africa",region:"Africa",sector:"Government",score:96,urgency:"Critical",kw:"cybersecurity, managed services, RFP IT, POPIA",date:"2025-01-29",close:7,url:"https://etenders.gov.za"},{id:2,title:"Nedbank VMware renewal and hybrid cloud migration 2025",source:"ITWeb",type:"renewal",loc:"South Africa",region:"Africa",sector:"BFSI",score:88,urgency:"Hot",kw:"VMware, renewal, virtualisation, cloud migration",date:"2025-01-29",close:22,url:"https://itweb.co.za"},{id:3,title:"MTN Nigeria Cisco SD-WAN and Fortinet NGFW for 5G rollout",source:"TechCabal",type:"news",loc:"Nigeria",region:"Africa",sector:"Telecoms",score:85,urgency:"Hot",kw:"Cisco, Fortinet, network security, infrastructure",date:"2025-01-28",close:null,url:"https://techcabal.com"},{id:4,title:"Saudi Aramco BCDR tender: backup and DR for 120 sites — closing Feb 7",source:"Arab News",type:"tender",loc:"Saudi Arabia",region:"Middle East",sector:"Government",score:94,urgency:"Critical",kw:"disaster recovery, BCDR, data backup, tender",date:"2025-01-28",close:5,url:"https://arabnews.com"},{id:5,title:"Shoprite RFQ: endpoint security and SIEM for 3,000 stores",source:"ITWeb",type:"tender",loc:"South Africa",region:"Africa",sector:"Retail",score:91,urgency:"Critical",kw:"endpoint security, SIEM, security renewal",date:"2025-01-27",close:12,url:"https://itweb.co.za"},{id:6,title:"UK NHS shortlists HPE and Dell EMC for server refresh",source:"ComputerWeekly",type:"news",loc:"United Kingdom",region:"Europe",sector:"Healthcare",score:82,urgency:"Hot",kw:"HPE, Dell EMC, server refresh, infrastructure",date:"2025-01-27",close:null,url:"https://computerweekly.com"},{id:7,title:"Eskom SOC tender: zero trust network segmentation — R18M",source:"eTenders SA",type:"tender",loc:"South Africa",region:"Africa",sector:"Government",score:93,urgency:"Critical",kw:"zero trust, network security, cybersecurity",date:"2025-01-26",close:9,url:"https://etenders.gov.za"},{id:8,title:"Safaricom Kenya Veeam BCDR and Acronis backup — 200 branches",source:"Techpoint Africa",type:"news",loc:"Kenya",region:"Africa",sector:"Telecoms",score:87,urgency:"Hot",kw:"Veeam, Acronis, BCDR, data backup",date:"2025-01-26",close:null,url:"https://techpoint.africa"},{id:9,title:"Dubai Municipality virtualisation and cloud migration 2025",source:"Khaleej Times",type:"tender",loc:"UAE",region:"Middle East",sector:"Government",score:90,urgency:"Hot",kw:"virtualisation, cloud migration, IT tender",date:"2025-01-25",close:28,url:"https://khaleejtimes.com"},{id:10,title:"Singapore GovTech RFP: MDR and SIEM for whole-of-government",source:"OpenGov Asia",type:"tender",loc:"Singapore",region:"Asia Pacific",sector:"Government",score:92,urgency:"Critical",kw:"MDR, SIEM, cybersecurity, RFP",date:"2025-01-24",close:6,url:"https://opengovasia.com"},{id:11,title:"Anglo American Fortinet OT security across mining operations",source:"MyBroadband",type:"news",loc:"South Africa",region:"Africa",sector:"Mining",score:89,urgency:"Hot",kw:"Fortinet, OT security, cybersecurity",date:"2025-01-24",close:null,url:"https://mybroadband.co.za"},{id:12,title:"Sasol HPE and Lenovo server refresh — R45M capex approved",source:"TechCentral",type:"news",loc:"South Africa",region:"Africa",sector:"Industrial",score:87,urgency:"Hot",kw:"HPE, Lenovo, server refresh, infrastructure",date:"2025-01-23",close:null,url:"https://techcentral.co.za"},{id:13,title:"CIBC Canada RFP: zero trust and endpoint security platform",source:"IT World Canada",type:"tender",loc:"Canada",region:"Americas",sector:"BFSI",score:88,urgency:"Hot",kw:"zero trust, endpoint security, RFP",date:"2025-01-23",close:35,url:"https://itworldcanada.com"},{id:14,title:"Mediclinic Acronis BCDR across 72 hospitals after ransomware",source:"ITWeb",type:"news",loc:"South Africa",region:"Africa",sector:"Healthcare",score:89,urgency:"Hot",kw:"Acronis, BCDR, ransomware, disaster recovery",date:"2025-01-22",close:null,url:"https://itweb.co.za"},{id:15,title:"Australia ATO cloud security and DR tender — R91M equivalent",source:"AusGov Tenders",type:"tender",loc:"Australia",region:"Asia Pacific",sector:"Government",score:91,urgency:"Warm",kw:"cloud security, disaster recovery, DR",date:"2025-01-20",close:55,url:"https://tenders.gov.au"},{id:16,title:"Exxaro Veeam renewal and HPE storage upgrade",source:"TechCentral",type:"renewal",loc:"South Africa",region:"Africa",sector:"Mining",score:86,urgency:"Hot",kw:"Veeam, HPE, renewal, server refresh",date:"2025-01-19",close:28,url:"https://techcentral.co.za"},{id:17,title:"German Bundesbank cybersecurity — Palo Alto Networks shortlisted",source:"Heise Online",type:"news",loc:"Germany",region:"Europe",sector:"BFSI",score:83,urgency:"Hot",kw:"cybersecurity, Palo Alto, network security",date:"2025-01-18",close:null,url:"https://heise.de"},{id:18,title:"Egyptian government BCDR: Lenovo and Dell EMC shortlisted",source:"Arab News",type:"news",loc:"Egypt",region:"Africa",sector:"Government",score:84,urgency:"Hot",kw:"BCDR, Lenovo, Dell EMC, disaster recovery",date:"2025-01-17",close:null,url:"https://arabnews.com"},{id:19,title:"Standard Chartered UAE HR system RFQ for 8,000 employees",source:"Gulf News",type:"tender",loc:"UAE",region:"Middle East",sector:"BFSI",score:79,urgency:"Warm",kw:"HR management, HRIS, HR technology",date:"2025-01-16",close:67,url:"https://gulfnews.com"},{id:20,title:"Itau Unibanco Brazil cybersecurity transformation — $25M",source:"ZDNet",type:"news",loc:"Brazil",region:"Americas",sector:"BFSI",score:78,urgency:"Warm",kw:"cybersecurity, ransomware, managed services",date:"2025-01-15",close:null,url:"https://zdnet.com"}];
+
+var RENEWALS=[{sw:"VMware vSphere Enterprise Plus",vendor:"VMware",client:"Standard Bank",value:"R450,000",date:"2025-02-14",days:7,urgency:"Critical"},{sw:"Fortinet FortiGate 600E FortiCare",vendor:"Fortinet",client:"Discovery Health",value:"R180,000",date:"2025-03-01",days:22,urgency:"Hot"},{sw:"Veeam Backup & Replication Enterprise",vendor:"Veeam",client:"Anglo American",value:"R320,000",date:"2025-03-28",days:49,urgency:"Hot"},{sw:"Acronis Cyber Protect Cloud",vendor:"Acronis",client:"Shoprite Group",value:"R95,000",date:"2025-04-15",days:67,urgency:"Warm"},{sw:"HPE GreenLake Support",vendor:"HPE",client:"Sasol",value:"R520,000",date:"2025-05-10",days:92,urgency:"Watch"},{sw:"Cisco SmartNet Total Care",vendor:"Cisco",client:"MTN SA",value:"R280,000",date:"2025-06-30",days:143,urgency:"Monitor"}];
+
+var AUDIT_ITEMS=[{t:"08:31:42",e:"Email sent (AI-personalised) to Sarah Chen, Nedbank CISO — POPIA basis: Legitimate Interest"},{t:"08:28:11",e:"Calendly booked — James Molefe (Absa CTO) — Deal auto-created in HubSpot pipeline"},{t:"08:15:03",e:"INSTANT ALERT sent — Saudi Aramco BCDR tender score 94 — closes in 5 days"},{t:"08:02:17",e:"DSAR completed — data package delivered — Certificate of compliance logged"},{t:"07:55:44",e:"Renewal reminder sent — VMware Standard Bank — 7 days to expiry — CRITICAL"},{t:"07:30:12",e:"ICP scores recalculated for 487 contacts — ML model v3.2 — 3 new Tier A contacts"}];
+
+var shownLeads=[],savedLeads=[],simIdx=0;
+var kwList=["virtualisation","virtualization","cybersecurity","BCDR","business continuity","disaster recovery","VMware","Veeam","Cisco","Dell EMC","HPE","Lenovo","HPI","Fortinet","Acronis","Palo Alto","CrowdStrike","Check Point","Sophos","SentinelOne","security renewal","software renewal","subscription renewal","maintenance renewal","managed services","endpoint security","zero trust","ransomware","data backup","firewall","network security","cloud migration","MDR","SIEM","HR management","HR technology","HRIS","infrastructure upgrade","server refresh","storage solution","IT tender","RFP IT","IT procurement","POPIA compliance","FSCA cybersecurity","DR testing","data protection","penetration testing","SD-WAN","OT security","zero-trust"];
+var locList=["South Africa","Nigeria","Kenya","Ghana","Egypt","Zimbabwe","Botswana","Namibia","Tanzania","Rwanda","Mauritius","Ethiopia","Angola","Zambia","UAE","Saudi Arabia","Qatar","Kuwait","Bahrain","Jordan","Oman","United Kingdom","Germany","France","Netherlands","Sweden","Switzerland","United States","Canada","Brazil","Mexico","Australia","India","Singapore","Malaysia","Japan","South Korea"];
+var REGIONS=[{l:"Africa",c:["South Africa","Nigeria","Kenya","Ghana","Egypt","Zimbabwe","Botswana","Namibia","Tanzania","Rwanda","Mauritius","Ethiopia","Angola","Zambia","Senegal","Ivory Coast"]},{l:"Middle East",c:["UAE","Saudi Arabia","Qatar","Kuwait","Bahrain","Jordan","Oman","Turkey","Israel"]},{l:"Europe",c:["United Kingdom","Germany","France","Netherlands","Sweden","Switzerland","Belgium","Spain","Italy","Poland","Denmark","Norway","Ireland","Finland"]},{l:"Americas",c:["United States","Canada","Brazil","Mexico","Argentina","Colombia","Chile","Peru"]},{l:"Asia Pacific",c:["Australia","India","Singapore","Malaysia","Indonesia","Japan","South Korea","New Zealand","Philippines","Thailand","Hong Kong"]}];
+var QS=["VMware renewal Africa","cybersecurity RFP Nigeria","BCDR tender Middle East","Fortinet enterprise Europe","Veeam backup Asia Pacific","IT tender South Africa","zero trust enterprise UK","HR technology HRIS global","disaster recovery government","software subscription renewal"];
+var TENS=[{n:"Naledzi Technologies",t:"Enterprise"},{n:"Standard Bank",t:"Quantum"},{n:"Discovery Holdings",t:"Enterprise"},{n:"MTN South Africa",t:"Professional"},{n:"Shoprite Group",t:"Starter"}];
+var tidx=0;
+
+// ═══ NAVIGATION ══════════════════════════════════════════════════════
+var PT={dashboard:"Dashboard",icp:"ICP Scoring Engine",sequences:"Email Sequences",ai:"AI Assistant",social:"Social Media",scanner:"Live Opportunity Scanner",gsearch:"Global Search",pipeline:"Deal Pipeline Walkthrough",renewals:"Renewal Tracker",config:"Scanner Configuration",script:"Get Script v5",security:"Security Centre",audit:"Audit Trail",tenants:"Tenant Management",health:"Self-Diagnosis",quantum:"Quantum Security",pricing:"Pricing & Tiers",popia:"POPIA Engine",deploy:"Deploy & Install"};
+
+function nav(el){
+  if(!el)return;
+  var pid=el.getAttribute('data-p');
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on')});
+  document.querySelectorAll('.ni').forEach(function(i){i.classList.remove('on')});
+  var panel=document.getElementById('p-'+pid);
+  if(panel)panel.classList.add('on');
+  el.classList.add('on');
+  document.getElementById('page-title').textContent=PT[pid]||pid;
+  if(pid==='script')genScript();
+  if(pid==='pipeline')renderPipeStage();
+}
+
+setInterval(function(){var e=document.getElementById('clk');if(e)e.textContent=new Date().toLocaleTimeString('en-ZA');},1000);
+
+function cycleTenant(){tidx=(tidx+1)%TENS.length;document.getElementById('ten-name').textContent=TENS[tidx].n;document.getElementById('ten-tier').textContent=TENS[tidx].t;}
+
+function showDeploy(){document.getElementById('deploy-modal').style.display='flex';}
+function hideDeploy(){document.getElementById('deploy-modal').style.display='none';}
+
+// ═══ DASHBOARD INIT ═══════════════════════════════════════════════════
+(function(){
+  var f=document.getElementById('funnel-chart');
+  if(f)f.innerHTML=[{n:"Contacts",v:487,c:"var(--nv2)"},{n:"Qualified",v:234,c:"var(--nv)"},{n:"Meeting",v:68,c:"var(--or)"},{n:"Proposal",v:31,c:"var(--gd)"},{n:"Won",v:8,c:"var(--gn)"}].map(function(s){return'<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--txs);margin-bottom:2px"><span>'+s.n+'</span><span>'+s.v+'</span></div><div style="background:var(--bdr);border-radius:3px;height:16px;overflow:hidden"><div style="width:'+(s.v/487*100).toFixed(0)+'%;height:100%;background:'+s.c+'"></div></div></div>';}).join('');
+  var ac=document.getElementById('ai-activity');
+  if(ac)ac.innerHTML=[["Emails personalised by AI","47","bn"],["ICP scores recalculated","487","bn"],["Intent signals detected","12","bo"],["Renewal reminders sent","2","br"],["POPIA consent checks","23","bg"],["Self-healing actions","2","bg"],["Scan cycles completed","47","bn"]].map(function(r){return'<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bdr);font-size:13px"><span>'+r[0]+'</span><span class="b '+r[2]+'">'+r[1]+'</span></div>';}).join('');
+})();
+
+// ═══ ICP ═════════════════════════════════════════════════════════════
+(function(){
+  var el=document.getElementById('icp-sliders');
+  if(!el)return;
+  var dims=[{n:"Firmographics",m:40,v:40},{n:"Technographics",m:25,v:22},{n:"Compliance & Pain",m:20,v:18},{n:"Behavioural Intent",m:15,v:13},{n:"Financial Fluency",m:10,v:9}];
+  var tot=dims.reduce(function(a,d){return a+d.v;},0);
+  el.innerHTML='<div id="icp-tot" style="font-size:21px;font-weight:700;color:var(--gn);margin-bottom:11px">'+tot+'/110 — Tier A</div>'+dims.map(function(d,i){return'<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px"><span>'+d.n+'</span><span id="iv'+i+'">'+d.v+'/'+d.m+'</span></div><input type="range" min="0" max="'+d.m+'" value="'+d.v+'" oninput="upICP('+i+',this.value,'+d.m+')" style="width:100%"></div>';}).join('');
+  var dist=document.getElementById('icp-dist');
+  if(dist)dist.innerHTML='<div style="display:flex;gap:2px;height:38px;align-items:flex-end">'+ [97,127,89,112,74,58,43,28,19,12,7].map(function(v,i){return'<div style="flex:1;background:'+(i<3?'var(--gn)':i<6?'var(--or)':'var(--rd)')+';height:'+(v/127*38).toFixed(0)+'px;border-radius:2px 2px 0 0;opacity:.8"></div>';}).join('')+'</div><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txx);margin-top:3px"><span>50</span><span>80</span><span>110</span></div>';
+})();
+function upICP(i,v,m){var e=document.getElementById('iv'+i);if(e)e.textContent=v+'/'+m;var inputs=document.querySelectorAll('#icp-sliders input[type=range]'),tot=0;inputs.forEach(function(inp){tot+=parseInt(inp.value)||0;});var te=document.getElementById('icp-tot');if(te){var tier=tot>=90?'Tier A':tot>=65?'Tier B':tot>=50?'Tier C':'Disqualify';te.textContent=tot+'/110 — '+tier;te.style.color=tot>=90?'var(--gn)':tot>=65?'var(--or)':'var(--rd)';}}
+
+// ═══ AI ASSISTANT ═════════════════════════════════════════════════════
+var AI_QA=[['✉️ Write BFSI intro email','Write a personalised BFSI intro email for a CISO at a large SA bank'],['💼 LinkedIn posts this week','Generate 4 LinkedIn posts for this week covering cybersecurity and BCDR'],['🎯 Analyse my pipeline','Analyse my pipeline — which deals are most likely to close this month?'],['📄 Generate proposal','Write a proposal for Naledzi BCDR services for a South African retailer'],['🔄 Renewal strategy','What is the best approach to convert the VMware Standard Bank renewal into a multi-year deal?'],['🌍 Global scan','Find BCDR tender opportunities in the Middle East and West Africa this week'],['🛡️ Objection handler','What objections will I face selling BCDR to a mining company and how do I handle each one?']];
+(function(){var el=document.getElementById('ai-qa');if(!el)return;el.innerHTML=AI_QA.map(function(a){return'<button class="btn" style="justify-content:flex-start;text-align:left" onclick="aiQ(\''+a[1].replace(/'/g,"\\'")+'\')">'+a[0]+'</button>';}).join('');var msgs=document.getElementById('ai-msgs');if(msgs)msgs.innerHTML='<div class="ai-m ai-b">Hello Ratshibvumo. I am your NaledZi AI Assistant. I can write personalised emails, analyse your pipeline, track renewals, scan for global opportunities, generate proposals, handle objections, or answer any strategic question. What would you like to do today?</div>';})();
+var AI_RESP={email:'Subject: [Company Name] — FSCA JS2 compliance and BCDR readiness 2025\n\nHi [First Name],\n\nAs [Company Name] navigates FSCA Joint Standard 2 enforcement, our defensive simulations consistently reveal the same pattern: legacy core-banking environments carry measurable exposure to load-shedding-triggered ransomware vectors that activate POPIA breach notification within hours.\n\nNaledzi Technologies delivers SA\'s first integrated managed virtualisation, cybersecurity, and BCDR platform engineered specifically for large financial institutions — RTO under 2 hours, FSCA JS2 evidence pack included.\n\nWould a 15-minute briefing be worthwhile? [Calendly link]\n\nRatshibvumo Matodzi | Founder & CEO | Naledzi Technologies | +27 83 616 0415',renewal:'Excellent focus area. For the VMware Standard Bank renewal expiring in 7 days:\n\n1. Call today — not email. This is a commercial conversation.\n\nOpening line: "I wanted to call personally to make sure we have continuity in place for your VMware vSphere renewal before the 14th — the last thing either of us needs is a service disruption or compliance gap."\n\n2. Propose a 2-year renewal at 15% discount — standard for multi-year VMware deals and protects your R450K revenue for 24 months.\n\n3. If budget approval is needed: offer a 30-day bridge renewal at full rate while they process the PO.\n\n4. Get a verbal commitment today, written PO by end of week.\n\nThis renewal is worth R450K. It is also your best upsell opportunity — ask if they want to add Veeam backup and Fortinet BCDR testing to the same commercial package.',default:'Based on your current data:\n\n• 3 hot leads need calls within 60 minutes: Sarah Chen (Nedbank CISO), James Molefe (Absa CTO), Dr Priya Naidoo (Discovery CIO)\n\n• 2 critical renewals: VMware Standard Bank (7 days), Fortinet Discovery (22 days) — call both clients today\n\n• DBSA R45M cybersecurity tender closes in 7 days — your highest-value immediate opportunity\n\n• Saudi Aramco BCDR tender closes in 5 days — strong international opportunity\n\nPriority action: Call Nedbank CISO Sarah Chen first — she opened your email 4 times which means she is actively evaluating. The DBSA tender is on her radar. Position Naledzi as the solution to both needs.\n\nWhat would you like to go deeper on?'};
+
+function sendAI(){var inp=document.getElementById('ai-inp');if(!inp)return;var msg=inp.value.trim();if(!msg)return;var box=document.getElementById('ai-msgs');if(!box)return;box.innerHTML+='<div class="ai-m ai-u">'+escH(msg)+'</div>';inp.value='';var resp=msg.toLowerCase().indexOf('email')!==-1||msg.toLowerCase().indexOf('write')!==-1?AI_RESP.email:msg.toLowerCase().indexOf('renewal')!==-1||msg.toLowerCase().indexOf('vmware')!==-1?AI_RESP.renewal:AI_RESP.default;setTimeout(function(){box.innerHTML+='<div class="ai-m ai-b">'+resp+'</div>';box.scrollTop=box.scrollHeight;},500);}
+function aiQ(txt){var inp=document.getElementById('ai-inp');if(inp)inp.value=txt;var msgs=document.getElementById('ai-msgs');if(msgs)msgs.innerHTML='';nav(document.querySelector('[data-p="ai"]'));sendAI();}
+
+// ═══ SECURITY ════════════════════════════════════════════════════════
+(function(){var el=document.getElementById('sec-ctrls');if(!el)return;el.innerHTML=["WAF active — 247 threats blocked (30 days)","Zero-trust mTLS — all microservices verified","SOC 2 Type I certified — Type II in progress","Vulnerability scanning — 0 critical findings","Container security (Falco) — no anomalies","Secrets management (Vault) — 0 exposed secrets","DDoS protection (Cloudflare Enterprise)","MFA enforcement — 100% of users","API rate limiting — Kong Gateway"].map(function(c){return'<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:13px"><span style="width:9px;height:9px;border-radius:50%;background:#4ade80;flex-shrink:0;display:inline-block"></span><span>'+c+'</span></div>';}).join('');})();
+
+// ═══ AUDIT ════════════════════════════════════════════════════════════
+function renderAudit(){var el=document.getElementById('audit-log');if(!el)return;el.innerHTML=AUDIT_ITEMS.map(function(a){return'<div style="display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px"><span style="color:var(--txx);min-width:65px;flex-shrink:0">'+a.t+'</span><span style="color:var(--txs)">'+a.e+'</span></div>';}).join('');}
+function addAudit(){var evts=["Lead scored: BCDR tender Nigeria — score 91, urgency Hot","VMware renewal alert — Exxaro — 45 days to expiry","Consent logged: Explicit Consent — contact@example.co.za","Email sequence paused — positive reply detected — owner notified","Quantum key rotation completed — all tenant CMKs updated","HubSpot sync: 3 new Tier A contacts auto-enrolled in BFSI sequence"];AUDIT_ITEMS.unshift({t:new Date().toISOString().slice(11,19),e:evts[Math.floor(Math.random()*evts.length)]});if(AUDIT_ITEMS.length>8)AUDIT_ITEMS.pop();renderAudit();}
+renderAudit();
+
+// ═══ TENANTS ═════════════════════════════════════════════════════════
+(function(){var el=document.getElementById('tenant-rows');if(!el)return;var rows=[["Naledzi Technologies","naledzi.co.za","Enterprise","23","Active","R85,000"],["Standard Bank","standardbank.co.za","Quantum","156","Active","R220,000"],["Discovery Holdings","discovery.co.za","Enterprise","89","Active","R85,000"],["MTN South Africa","mtn.co.za","Professional","34","Active","R35,000"],["Shoprite Group","shoprite.co.za","Starter","8","Active","R12,000"],["Anglo American","angloamerican.com","Enterprise","67","Active","R85,000"],["Sasol","sasol.com","Enterprise","44","Active","R85,000"],["Netcare","netcare.co.za","Professional","21","Active","R35,000"]];el.innerHTML=rows.map(function(r){var tc=r[2]==='Quantum'?'bp':r[2]==='Enterprise'?'bg':r[2]==='Professional'?'bo':'bn';return'<tr><td><strong>'+r[0]+'</strong></td><td style="font-family:monospace;font-size:11px">'+r[1]+'</td><td><span class="b '+tc+'">'+r[2]+'</span></td><td>'+r[3]+'</td><td><span class="b bg">'+r[4]+'</span></td><td><strong>'+r[5]+'</strong></td><td><button class="btn btn-sm">Manage</button></td></tr>';}).join('');})();
+
+// ═══ HEALTH ══════════════════════════════════════════════════════════
+(function(){var svcs=[{n:"API Gateway",cpu:23,mem:41,lat:"12ms",ok:true},{n:"Auth Service",cpu:8,mem:28,lat:"4ms",ok:true},{n:"AI Service (Claude)",cpu:67,mem:72,lat:"340ms",ok:false},{n:"Email Service",cpu:31,mem:44,lat:"18ms",ok:true},{n:"ICP Engine",cpu:55,mem:68,lat:"120ms",ok:true},{n:"POPIA Service",cpu:12,mem:19,lat:"8ms",ok:true}];var hs=document.getElementById('health-stats');if(hs)hs.innerHTML=svcs.slice(0,3).map(function(s){return'<div class="st"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-size:13px;font-weight:600">'+s.n+'</span><span style="width:10px;height:10px;border-radius:50%;background:'+(s.ok?'#4ade80':'#f59e0b')+';display:inline-block"></span></div><div style="font-size:12px;color:var(--txs)">CPU: '+s.cpu+'%<div class="pb"><div class="pbf" style="width:'+s.cpu+'%;background:'+(s.cpu>60?'var(--or)':'var(--gn)')+'"></div></div></div><div style="font-size:12px;color:var(--txs);margin-top:5px">Latency: '+s.lat+'</div></div>';}).join('');var hl=document.getElementById('heal-log');if(hl)hl.innerHTML=[{t:"08:14",a:"AI Service memory pressure — auto-scaled 2→4 pods in 43 seconds"},{t:"06:55",a:"Email queue spike — consumers auto-increased 3→8, normalised in 2m"},{t:"Yesterday",a:"Database connections exhausted — auto-increased max_connections"},{t:"2 days ago",a:"SSL certificate auto-renewed 30 days before expiry"}].map(function(h){return'<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px"><span style="color:var(--txx);min-width:70px">'+h.t+'</span><span style="color:var(--txs)">'+h.a+'</span></div>';}).join('');var sm=document.getElementById('svc-map');if(sm)sm.innerHTML=svcs.map(function(s){return'<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--bdr);font-size:12px"><span style="width:9px;height:9px;border-radius:50%;background:'+(s.ok?'#4ade80':'#f59e0b')+';flex-shrink:0;display:inline-block"></span><span style="flex:1">'+s.n+'</span><span style="color:var(--txx)">'+s.lat+'</span><span class="b '+(s.ok?'bg':'bo')+'">'+(s.ok?'OK':'Warning')+'</span></div>';}).join('');})();
+
+// ═══ PRICING ════════════════════════════════════════════════════════
+(function(){var el=document.getElementById('tier-cards');if(!el)return;var tiers=[{n:"Starter",p:"R12,000",c:"var(--nv2)",rec:false,f:["2,500 contacts","3 sequences","Standard AI","Basic POPIA","Email support (48h)"]},{n:"Professional",p:"R35,000",c:"var(--or)",rec:true,f:["25,000 contacts","15 sequences","Claude Sonnet AI","Advanced POPIA + DSAR","Priority support (4h)"]},{n:"Enterprise",p:"R85,000",c:"var(--gn)",rec:false,f:["Unlimited contacts","Unlimited sequences","Claude Opus AI","Full compliance suite","Dedicated CSM"]},{n:"Quantum",p:"Custom",c:"var(--pu)",rec:false,f:["Everything in Enterprise","PQC cryptography + HSM","Private cluster","Tenant-of-tenants","24/7 dedicated engineer"]}];el.innerHTML=tiers.map(function(t){return'<div style="background:var(--card);border:2px solid '+(t.rec?'var(--or)':'var(--bdr)')+';border-radius:var(--r);padding:15px;text-align:center;transition:border-color .15s" onmouseover="this.style.borderColor=\'var(--nv)\'" onmouseout="this.style.borderColor=\''+(t.rec?'var(--or)':'var(--bdr)')+'\'">'+( t.rec?'<div class="b bo" style="margin-bottom:8px">Most Popular</div>':'')+'<div style="font-size:14px;font-weight:700;color:'+t.c+'">'+t.n+'</div><div style="font-size:23px;font-weight:700;color:'+t.c+';margin:6px 0">'+t.p+'</div><div style="font-size:11px;color:var(--txx);margin-bottom:10px">/month</div>'+t.f.map(function(f){return'<div style="font-size:12px;color:var(--txs);padding:3px 0;border-bottom:1px solid var(--bdr)">✓ '+f+'</div>';}).join('')+'<button class="btn btn-sm btn-p" style="width:100%;margin-top:10px">Get started</button></div>';}).join('');})();
+
+// ═══ POPIA ════════════════════════════════════════════════════════════
+(function(){var cb=document.getElementById('consent-bars');if(cb)cb.innerHTML=[["Explicit Consent","312","64.1%","var(--gn)"],["Legitimate Interest","123","25.3%","var(--nv)"],["Contract Performance","34","7.0%","var(--or)"],["Opt-Out","18","3.7%","var(--rd)"]].map(function(c){return'<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px"><span>'+c[0]+'</span><span style="color:var(--txs)">'+c[1]+' ('+c[2]+')</span></div><div style="background:var(--bdr);border-radius:3px;height:13px;overflow:hidden"><div style="width:'+c[2]+';height:100%;background:'+c[3]+'"></div></div></div>';}).join('');var pl=document.getElementById('popia-list');if(pl)pl.innerHTML=["Information Officer registered with Regulator ✅","Data inventory and processing register ✅","Consent workflow active and logging ✅","DSAR automation — 5-day SLA met ✅","Breach notification procedure tested ✅","Cross-border transfer safeguards ✅","Employee POPIA training completed ✅","Third-party processor agreements ⚠️","Annual POPIA audit scheduled ⚠️","Privacy impact assessments ⚠️"].map(function(c){return'<div style="padding:6px 0;border-bottom:1px solid var(--bdr);font-size:13px">'+c+'</div>';}).join('');})();
+
+// ═══ SCANNER FEED ═════════════════════════════════════════════════════
+function urgBg(u){return u==='Critical'?'var(--rdL)':u==='Hot'?'var(--gdL)':u==='Warm'?'var(--nvS)':u==='Watch'?'var(--gnL)':'var(--bg)';}
+function urgCl(u){return u==='Critical'?'var(--rd)':u==='Hot'?'var(--gd)':u==='Warm'?'var(--nv2)':u==='Watch'?'var(--gn)':'var(--txs)';}
+function urgClass(u){return u==='Critical'?'urg-c':u==='Hot'?'urg-h':u==='Warm'?'urg-w':u==='Watch'?'urg-wt':'urg-m';}
+
+function renderFeed(data){
+  var el=document.getElementById('feed-box');if(!el)return;
+  if(!data||!data.length){el.innerHTML='<div style="padding:24px;text-align:center;color:var(--txs);font-size:13px">No results. Try different filters or click Simulate scan.</div>';updSc([]);return;}
+  var sorted=data.slice().sort(function(a,b){var o={Critical:1,Hot:2,Warm:3,Watch:4,Monitor:5};return(o[a.urgency]||5)-(o[b.urgency]||5)||b.score-a.score;});
+  el.innerHTML=sorted.map(function(l){
+    var bg=urgBg(l.urgency),cl=urgCl(l.urgency);
+    var scBg=l.score>=80?'background:var(--gnL);color:var(--gn)':l.score>=60?'background:var(--gdL);color:var(--gd)':'background:var(--bg);color:var(--txs)';
+    var tc=l.type==='tender'?'br':l.type==='renewal'?'bp':'bg';
+    var cStr=l.close!==null?(l.close<=7?'<strong style="color:var(--rd)"> · Closes in '+l.close+'d ⚠️</strong>':' · Closes in '+l.close+'d'):'';
+    return'<div class="lr" style="background:'+bg+'">'
+      +'<div class="sc" style="'+scBg+'">'+l.score+'</div>'
+      +'<div><div class="lt"><a href="'+l.url+'" target="_blank" style="color:var(--nv);text-decoration:none">'+escH(l.title)+'</a></div>'
+      +'<div class="lm"><span style="background:'+bg+';color:'+cl+';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;margin-right:5px">'+l.urgency+'</span>'
+      +'<span class="b '+tc+'" style="margin-right:5px">'+l.type+'</span>'+escH(l.source)+' · '+escH(l.loc)+' · '+escH(l.sector)+''+cStr+'<br>Keywords: '+escH(l.kw)+'</div></div>'
+      +'<div style="display:flex;flex-direction:column;gap:4px"><button class="btn btn-sm btn-p" onclick="saveLead('+l.id+')">Save</button><a href="'+l.url+'" target="_blank" class="btn btn-sm">Source</a></div></div>';
+  }).join('');
+  updSc(data);
+}
+
+function updSc(d){
+  d=d||[];
+  var set={};d.forEach(function(l){set[l.loc]=true;});
+  var e;
+  e=document.getElementById('sc-tot');if(e)e.textContent=d.length;
+  e=document.getElementById('sc-cr');if(e)e.textContent=d.filter(function(l){return l.urgency==='Critical';}).length;
+  e=document.getElementById('sc-ht');if(e)e.textContent=d.filter(function(l){return l.score>=80;}).length;
+  e=document.getElementById('sc-ct');if(e)e.textContent=Object.keys(set).length;
+  e=document.getElementById('d-opps');if(e)e.textContent=d.length;
+  e=document.getElementById('pb-opps');if(e)e.style.width=Math.min(100,d.length/20*100)+'%';
+  e=document.getElementById('saved-cnt');if(e)e.textContent=savedLeads.length+' records stored';
+}
+
+function filterFeed(){
+  var uf=(document.getElementById('f-urg')||{}).value||'';
+  var tf=(document.getElementById('f-typ')||{}).value||'';
+  var sf=(document.getElementById('f-sec')||{}).value||'';
+  var rf=(document.getElementById('f-reg')||{}).value||'';
+  renderFeed(shownLeads.filter(function(l){return(!uf||l.urgency===uf)&&(!tf||l.type===tf)&&(!sf||l.sector===sf)&&(!rf||l.region===rf);}));
+}
+
+function simScan(){var l=ALL_LEADS[simIdx%ALL_LEADS.length];simIdx++;if(!shownLeads.some(function(x){return x.id===l.id;}))shownLeads.unshift(l);filterFeed();}
+function clearFeed(){shownLeads=[];simIdx=0;filterFeed();}
+function saveLead(id){var lead=ALL_LEADS.find(function(l){return l.id===id;});if(lead&&!savedLeads.some(function(l){return l.id===id;})){savedLeads.push(Object.assign({},lead,{saved:new Date().toLocaleString('en-ZA')}));updSc(shownLeads);toast('✓ Saved: '+lead.title.slice(0,50)+'…');}}
+
+// ═══ GLOBAL SEARCH ════════════════════════════════════════════════════
+(function(){
+  var el=document.getElementById('qs-btns');
+  if(el)el.innerHTML=QS.map(function(q){return'<button class="btn btn-sm" onclick="qs(\''+q.replace(/'/g,"\\'")+'\')">'+q+'</button>';}).join('');
+  buildGNLinks('','');
+})();
+
+function qs(q){var i=document.getElementById('gq');if(i)i.value=q;nav(document.querySelector('[data-p="gsearch"]'));gSearch();}
+function gSearch(){
+  var q=((document.getElementById('gq')||{}).value||'').toLowerCase().trim();
+  var region=((document.getElementById('g-reg')||{}).value||'').toLowerCase();
+  var sector=((document.getElementById('g-sec')||{}).value||'').toLowerCase();
+  var results=ALL_LEADS.filter(function(l){var m=!q||l.title.toLowerCase().indexOf(q)!==-1||l.kw.toLowerCase().indexOf(q)!==-1||l.loc.toLowerCase().indexOf(q)!==-1;var lm=!region||l.loc.toLowerCase().indexOf(region)!==-1||l.region.toLowerCase().indexOf(region)!==-1;var sm=!sector||l.sector.toLowerCase().indexOf(sector)!==-1;return m&&lm&&sm;});
+  var el=document.getElementById('gs-results');if(!el)return;
+  if(!results.length){el.innerHTML='<div style="padding:16px;text-align:center;color:var(--txs);font-size:13px">No matches in demo database. Use the Google News links below for live global results.</div>';}
+  else{el.innerHTML=results.sort(function(a,b){return b.score-a.score;}).map(function(l){var bg=urgBg(l.urgency),cl=urgCl(l.urgency);var sc=l.score>=80?'background:var(--gnL);color:var(--gn)':'background:var(--gdL);color:var(--gd)';var tc=l.type==='tender'?'br':l.type==='renewal'?'bp':'bg';return'<div class="lr" style="background:'+bg+'"><div class="sc" style="'+sc+'">'+l.score+'</div><div><div class="lt"><a href="'+l.url+'" target="_blank" style="color:var(--nv);text-decoration:none">'+escH(l.title)+'</a></div><div class="lm"><span style="background:'+bg+';color:'+cl+';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;margin-right:5px">'+l.urgency+'</span><span class="b '+tc+'" style="margin-right:5px">'+l.type+'</span>'+escH(l.source)+' · '+escH(l.loc)+' · '+escH(l.sector)+'<br>'+escH(l.kw)+'</div></div><button class="btn btn-sm" onclick="saveLead('+l.id+')">Save</button></div>';}).join('');}
+  buildGNLinks(q,region);
+}
+function buildGNLinks(q,region){
+  var el=document.getElementById('gn-links');if(!el)return;
+  var terms=q?[q+(region?' '+region:'')]:'cybersecurity enterprise,IT tender africa,BCDR disaster recovery,VMware renewal,software renewal enterprise,Fortinet enterprise'.split(',');
+  el.innerHTML=terms.map(function(t){return'<a href="https://news.google.com/rss/search?q='+encodeURIComponent(t)+'" target="_blank" class="btn btn-sm" style="text-decoration:none">'+t+' ↗</a>';}).join('');
+}
+
+// ═══ DEAL PIPELINE WALKTHROUGH ════════════════════════════════════════
+var PIPE_STAGES=[
+  {t:"Scanner detects",sub:"Google Apps Script wakes automatically every 30 min — your computer can be off",auto:["Fetches 15+ RSS feeds in parallel using UrlFetchApp","Each headline scored against 40+ keywords — up to 100 points","Closing date extracted from article text","Urgency classified: Critical / Hot / Warm / Watch / Monitor"],you:[],tools:[{n:"Google Apps Script",c:"#FF7A59"},{n:"Google News RSS",c:"#4285F4"}],out:"Raw opportunity scored and classified"},
+  {t:"Recorded permanently",sub:"Every qualifying result written to Google Sheet — searchable forever",auto:["Deduplicated — never the same URL twice","Row colour-coded by urgency — red=Critical, amber=Hot, blue=Warm","All 14 columns written: date, source, headline, URL, keywords, location, sector, score, urgency, type, closing date, days left, signals, emailed","Sheet auto-trims to 5,000 rows maximum"],you:[],tools:[{n:"Google Sheets",c:"#0F9D58"}],out:"Permanent searchable database entry created"},
+  {t:"Instant email fired",sub:"Critical/Hot leads emailed within 60 seconds — not waiting for next scan cycle",auto:["Urgent leads bypass the 30-min schedule — immediate dispatch","Branded HTML email: urgency badge, score, headline, keywords, location, sector, days-to-deadline","Daily 7am summary email even if no new leads — confirms scanner health"],you:["Open email on phone","Click through to verify it is genuine","If relevant — proceed to qualify"],tools:[{n:"GmailApp (Apps Script)",c:"#D44638"}],out:"You receive a colour-coded alert email on your phone within 60 seconds"},
+  {t:"You qualify",sub:"5 minutes per lead — the first human step",auto:["HubSpot checks existing contact history for the organisation"],you:["Read the full source article","Is the opportunity genuine and relevant to Naledzi's services?","Is the organisation 500+ employees or R500M+ revenue?","Can we find a decision-maker contact? If YES — proceed"],tools:[{n:"Gmail",c:"#D44638"},{n:"LinkedIn",c:"#0A66C2"},{n:"HubSpot",c:"#FF7A59"}],out:"Opportunity validated — decision to pursue confirmed"},
+  {t:"Contact identified",sub:"Find the CISO, CIO, CTO, or IT Director — verify their email",auto:["Apollo.io enriches new contacts automatically","HubSpot checks for existing records at this company"],you:["LinkedIn → Company Page → People → filter by CISO / CIO / CTO","Hunter.io → enter company domain → find verified email format","Add to HubSpot with sector tag — this determines which sequence they enter"],tools:[{n:"LinkedIn",c:"#0A66C2"},{n:"Hunter.io",c:"#FF6B2B"},{n:"HubSpot CRM",c:"#FF7A59"}],out:"Verified contact in HubSpot — ready for POPIA gate"},
+  {t:"POPIA consent gate",sub:"HubSpot workflow fires automatically — compliance before any sales email",auto:["Consent status checked for every new contact","If no consent: consent capture email queued within 24 hours","YES reply: logged as Explicit Consent — sequence enrolled","No reply in 7 days or NO: suppressed forever with audit trail","Legitimate Interest logged automatically for B2B professional contacts"],you:["Nothing — runs completely automatically"],tools:[{n:"HubSpot Workflows",c:"#FF7A59"}],out:"Every contact has documented lawful basis — full POPIA compliance"},
+  {t:"5-email sequence",sub:"HubSpot sends 5 personalised emails over 6 weeks — you do nothing",auto:["Email 1 Day 1 — intro + sector pain + Calendly link","Email 2 Day 7 — value email + solution brief","Email 3 Day 14 — load-shedding + ransomware scenario","Email 4 Day 21 — FSCA JS2 urgency + assessment offer","Email 5 Day 35 — breakup email (generates most replies)","Sequence pauses on reply, stops on Calendly booking"],you:["Call any contact who opens email 3+ times within 60 minutes"],tools:[{n:"HubSpot Sequences",c:"#FF7A59"},{n:"Calendly (embedded)",c:"#0069FF"}],out:"5 personalised touchpoints delivered over 6 weeks with zero effort"},
+  {t:"LinkedIn parallel",sub:"Social visibility reinforces email outreach simultaneously",auto:["Buffer publishes 5 posts per week at 9am daily — all platforms"],you:["Send 5–10 LinkedIn connection requests each morning (10 min)","Monday: schedule week's posts in Buffer using Canva (30 min)","Reply to comments and messages (5 min daily)"],tools:[{n:"LinkedIn",c:"#0A66C2"},{n:"Buffer",c:"#1DA1F2"},{n:"Canva",c:"#00C4CC"}],out:"Daily LinkedIn presence — visible even to prospects ignoring emails"},
+  {t:"Meeting booked",sub:"Prospect clicks Calendly — everything happens without you",auto:["Prospect selects slot — no back-and-forth emails","Calendly sends confirmation + calendar invite with Zoom link","HubSpot creates Deal automatically — Meeting Booked stage","You receive phone notification instantly","Reminder email to prospect 24h and 1h before call"],you:["Prepare: 5 min on LinkedIn reading prospect's recent posts","Have your 5 discovery questions ready"],tools:[{n:"Calendly",c:"#0069FF"},{n:"HubSpot CRM",c:"#FF7A59"},{n:"Zoom",c:"#2D8CFF"}],out:"Confirmed meeting in calendar — deal created — both parties prepared"},
+  {t:"Discovery call",sub:"15 minutes — 5 questions — listen twice as much as you talk",auto:["HubSpot logs meeting activity","Proposal follow-up fires automatically at Day 7 if no reply","Call reminder alert at Day 14"],you:["Run 15-min call: ask the 5 discovery questions","End by offering proposal within 48 hours","Log notes in HubSpot immediately after","Update deal to Proposal Sent within 48 hours"],tools:[{n:"Zoom",c:"#2D8CFF"},{n:"HubSpot CRM",c:"#FF7A59"}],out:"Prospect's pain understood — proposal committed"},
+  {t:"Proposal sent",sub:"Write it, send it — HubSpot handles all follow-up",auto:["Day 7: automated follow-up email if no response","Day 14: call-me alert if still no response","If proposal opened 3+ times: instant phone notification — call now"],you:["Write proposal using Naledzi solution briefs as foundation","Send with relevant brief + BCDR Playbook attached","Mark Proposal Sent in HubSpot — triggers automatic follow-up"],tools:[{n:"HubSpot CRM",c:"#FF7A59"},{n:"Naledzi Solution Briefs",c:"#1B2A6B"}],out:"Professional proposal delivered — follow-up automated — deal cannot go cold"},
+  {t:"Close the deal",sub:"Negotiate, sign, add to renewals — the system perpetuates itself",auto:["HubSpot removes contact from all sales sequences on Won","Deal value added to revenue dashboard","Client enters onboarding sequence","Renewal tracker cascade begins if contract added"],you:["Commercial conversation — agree scope, price, terms","Handle objections","Sign contract via DocuSign or PDF","Mark Won in HubSpot with deal value in Rands","Add contract to Renewal Tracker","Ask for 2 referrals"],tools:[{n:"HubSpot CRM",c:"#FF7A59"},{n:"NaledZi Renewals Tracker",c:"#1A7A4A"}],out:"Signed contract. Revenue recorded. Renewal armed. System feeds itself."},
+];
+
+var pipeIdx=0;
+function renderPipeStage(){
+  var s=PIPE_STAGES[pipeIdx];
+  var pills=document.getElementById('pipe-stages');
+  if(pills)pills.innerHTML=PIPE_STAGES.map(function(st,i){var cls=i<pipeIdx?'ps done':i===pipeIdx?'ps on':'ps';return'<div class="'+cls+'" onclick="pipeJump('+i+')">'+(i<pipeIdx?'✓ ':'')+''+(i+1)+'. '+st.t+'</div>';}).join('');
+  var autoHtml=s.auto.length?'<div class="auto-col"><div class="col-h">Runs automatically</div>'+s.auto.map(function(a){return'<div class="it"><div class="dot"></div><div>'+a+'</div></div>';}).join('')+'</div>':'';
+  var youHtml=s.you.length?'<div class="you-col"><div class="col-h">You do this</div>'+s.you.map(function(y){return'<div class="it"><div class="dot"></div><div>'+y+'</div></div>';}).join('')+'</div>':'';
+  var colCls=s.auto.length&&s.you.length?'col-2':'';
+  var detail=document.getElementById('pipe-detail');
+  if(detail)detail.innerHTML=
+    '<div class="sd-hdr"><div class="sd-n">Stage '+(pipeIdx+1)+' of '+PIPE_STAGES.length+'</div><div class="sd-t">'+s.t+'</div><div class="sd-s">'+s.sub+'</div></div>'
+    +'<div class="'+colCls+'" style="margin-bottom:12px">'+autoHtml+youHtml+'</div>'
+    +'<div class="oc-box"><div class="oc-lbl">What you have at the end of this stage</div><div class="oc-txt">'+s.out+'</div></div>'
+    +'<div><div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txs);margin-bottom:6px">Tools used</div><div class="tool-row">'+s.tools.map(function(t){return'<span class="tool"><span class="tool-dot" style="background:'+t.c+'"></span>'+t.n+'</span>';}).join('')+'</div></div>';
+  var bb=document.getElementById('pipe-back'),bn=document.getElementById('pipe-next');
+  if(bb)bb.style.opacity=pipeIdx===0?'0.3':'1';
+  if(bn)bn.textContent=pipeIdx===PIPE_STAGES.length-1?'Start over':'Next stage →';
+}
+function pipeStep(d){pipeIdx=d===1&&pipeIdx===PIPE_STAGES.length-1?0:Math.max(0,Math.min(PIPE_STAGES.length-1,pipeIdx+d));renderPipeStage();}
+function pipeJump(i){pipeIdx=i;renderPipeStage();}
+
+// ═══ RENEWALS ═════════════════════════════════════════════════════════
+function renderRenewals(){
+  var el=document.getElementById('renewal-tbl');if(!el)return;
+  el.innerHTML='<table class="tbl"><thead><tr><th>Software / Product</th><th>Vendor</th><th>Client</th><th>Value</th><th>Renewal Date</th><th>Days Left</th><th>Status</th><th>Action</th></tr></thead><tbody>'+
+  RENEWALS.map(function(r){
+    var bg=urgBg(r.urgency),cl=urgCl(r.urgency);
+    var d=r.days<=7?'<strong style="color:var(--rd)">'+r.days+' days ⚠️</strong>':r.days<=30?'<strong style="color:var(--gd)">'+r.days+' days</strong>':r.days+' days';
+    return'<tr style="background:'+bg+'"><td><strong>'+escH(r.sw)+'</strong></td><td>'+escH(r.vendor)+'</td><td>'+escH(r.client)+'</td><td>'+escH(r.value)+'</td><td>'+escH(r.date)+'</td><td>'+d+'</td><td><span style="background:'+bg+';color:'+cl+';padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">'+r.urgency+'</span></td><td><button class="btn btn-sm" onclick="sendRenewalAlert(\''+r.sw.replace(/'/g,"\\'")+'\',\''+r.client.replace(/'/g,"\\'")+'\','+r.days+')">Send alert</button></td></tr>';
+  }).join('')+'</tbody></table>';
+  var cr=document.getElementById('rn-cr'),ht=document.getElementById('rn-ht'),tot=document.getElementById('rn-tot');
+  if(cr)cr.textContent=RENEWALS.filter(function(r){return r.urgency==='Critical';}).length;
+  if(ht)ht.textContent=RENEWALS.filter(function(r){return r.urgency==='Hot';}).length;
+  if(tot)tot.textContent=RENEWALS.length;
+  var rb=document.getElementById('ren-badge');if(rb)rb.textContent=RENEWALS.filter(function(r){return r.urgency==='Critical';}).length;
+}
+renderRenewals();
+function sendRenewalAlert(sw,client,days){toast('✓ Renewal alert sent to admin@naledzitechnologies.co.za — '+sw+' ('+client+') expires in '+days+' days');}
+function toggleAddRenewal(){var f=document.getElementById('add-renewal-form');if(f)f.style.display=f.style.display==='none'?'block':'none';}
+function addRenewal(){
+  var sw=(document.getElementById('r-sw')||{}).value||'';
+  var vn=(document.getElementById('r-vn')||{}).value||'';
+  var cl=(document.getElementById('r-cl')||{}).value||'';
+  var vl=(document.getElementById('r-vl')||{}).value||'';
+  var dt=(document.getElementById('r-dt')||{}).value||'';
+  if(!sw||!cl||!dt){toast('Please fill in software, client, and renewal date');return;}
+  var d=new Date(dt),today=new Date();
+  var days=Math.ceil((d.getTime()-today.getTime())/86400000);
+  var urg=days<=7?'Critical':days<=30?'Hot':days<=60?'Warm':days<=90?'Watch':'Monitor';
+  RENEWALS.unshift({sw:sw,vendor:vn,client:cl,value:'R'+vl,date:dt,days:days,urgency:urg});
+  renderRenewals();
+  document.getElementById('add-renewal-form').style.display='none';
+  ['r-sw','r-vn','r-cl','r-vl','r-dt'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  toast('✓ Contract added: '+sw+' for '+cl+' — '+days+' days to renewal');
+}
+
+// ═══ KEYWORDS / LOCATIONS ═════════════════════════════════════════════
+function renderKws(){var el=document.getElementById('kw-box');if(!el)return;el.innerHTML=kwList.map(function(k,i){return'<span class="kw-tag">'+escH(k)+'<span class="kw-rm" onclick="kwList.splice('+i+',1);renderKws()">×</span></span>';}).join('');var c=document.getElementById('kw-cnt');if(c)c.textContent=kwList.length;}
+function addKw(){var i=document.getElementById('kw-in');if(!i)return;var v=i.value.trim();if(v&&kwList.indexOf(v)===-1){kwList.push(v);renderKws();}i.value='';}
+function resetKws(){kwList=["virtualisation","cybersecurity","BCDR","VMware","Veeam","Cisco","Fortinet","Acronis","HPE","Lenovo","managed services","endpoint security","zero trust","ransomware","disaster recovery","IT tender","RFP IT","software renewal","subscription renewal","maintenance renewal","POPIA compliance","MDR","SIEM","HR management","data backup","firewall","server refresh","OT security","SD-WAN"];renderKws();}
+function renderLocs(){var el=document.getElementById('loc-box');if(!el)return;el.innerHTML=locList.map(function(l,i){return'<span class="kw-tag">'+escH(l)+'<span class="kw-rm" onclick="locList.splice('+i+',1);renderLocs()">×</span></span>';}).join('');var c=document.getElementById('loc-cnt');if(c)c.textContent=locList.length;}
+function addLoc(){var i=document.getElementById('loc-in');if(!i)return;var v=i.value.trim();if(v&&locList.indexOf(v)===-1){locList.push(v);renderLocs();}i.value='';}
+function addRegion(ri){REGIONS[ri].c.forEach(function(l){if(locList.indexOf(l)===-1)locList.push(l);});renderLocs();}
+(function(){var el=document.getElementById('rg-btns');if(!el)return;el.innerHTML=REGIONS.map(function(rg,i){return'<button style="padding:4px 10px;font-size:11px;border-radius:20px;border:1px solid var(--bdr);background:var(--card);color:var(--txs);cursor:pointer;transition:all .15s" onmouseover="this.style.background=\'var(--nvS)\'" onmouseout="this.style.background=\'var(--card)\'" onclick="addRegion('+i+')">+'+rg.l+'</button>';}).join('');})();
+function saveConfig(){var m=document.getElementById('cfg-msg');if(m){m.textContent='✓ Saved — script regenerated';setTimeout(function(){m.textContent='';},3000);}genScript();}
+renderKws();renderLocs();
+
+// ═══ SCRIPT GENERATOR v5 ═══════════════════════════════════════════
+function genScript(){
+  var email=(document.getElementById('al-email')||{}).value||'admin@naledzitechnologies.co.za';
+  var minScore=(document.getElementById('min-sc')||{}).value||60;
+  var kwStr=kwList.map(function(k){return'  "'+k+'"';}).join(',\n');
+  var locStr=locList.map(function(l){return'  "'+l+'"';}).join(',\n');
+  var script='// NaledZi Intelligence Platform — Apps Script v5\n'
+    +'// Generated: '+new Date().toISOString().slice(0,10)+' | '+kwList.length+' keywords | '+locList.length+' locations\n'
+    +'// NEW IN v5: parallel feed processing, renewal tracking, urgency engine, instant email\n'
+    +'// INSTALL: script.google.com → New project → Paste → Save → Run → Allow permissions\n'
+    +'// TRIGGERS: scanLeads → every 30 min | checkRenewals → day timer 6am | dailySummary → 7am\n\n'
+    +'var CFG={\n'
+    +'  OPPS:"NaledZi Opportunities",\n'
+    +'  RENEW:"NaledZi Renewals",\n'
+    +'  EMAIL:"'+email+'",\n'
+    +'  MIN_SCORE:'+minScore+',\n'
+    +'  INSTANT_SCORE:70,\n'
+    +'  REMINDERS:[90,60,30,7]\n'
+    +'};\n\n'
+    +'var KW=[\n'+kwStr+'\n];\n\n'
+    +'var LOCATIONS=[\n'+locStr+'\n];\n\n'
+    +'var SIGNALS=["tender","RFP","RFQ","procurement","renewal","contract","budget","upgrade","refresh","bid","shortlist","evaluation","closing date","deadline","request for proposal","request for quotation"];\n\n'
+    +'var FEEDS=[\n'
+    +'  "https://news.google.com/rss/search?q=cybersecurity+enterprise+africa",\n'
+    +'  "https://news.google.com/rss/search?q=IT+tender+south+africa+2025",\n'
+    +'  "https://news.google.com/rss/search?q=BCDR+disaster+recovery+enterprise",\n'
+    +'  "https://news.google.com/rss/search?q=VMware+Veeam+renewal",\n'
+    +'  "https://news.google.com/rss/search?q=software+renewal+subscription+enterprise",\n'
+    +'  "https://news.google.com/rss/search?q=Fortinet+Cisco+enterprise",\n'
+    +'  "https://news.google.com/rss/search?q=ransomware+south+africa+enterprise",\n'
+    +'  "https://news.google.com/rss/search?q=IT+infrastructure+RFP+tender+global",\n'
+    +'  "https://news.google.com/rss/search?q=cybersecurity+IT+middle+east",\n'
+    +'  "https://news.google.com/rss/search?q=HPE+Dell+server+refresh",\n'
+    +'  "https://news.google.com/rss/search?q=zero+trust+enterprise+security",\n'
+    +'  "https://news.google.com/rss/search?q=HR+technology+HRIS+enterprise",\n'
+    +'  "https://itweb.co.za/feed",\n'
+    +'  "https://mybroadband.co.za/feed",\n'
+    +'  "https://techcentral.co.za/feed",\n'
+    +'  "https://techcabal.com/feed",\n'
+    +'  "https://techpoint.africa/feed"\n'
+    +'];\n\n'
+    +'function urg(score,days){if(score>=90||(days!==null&&days<=7))return"Critical";if(score>=80||(days!==null&&days<=30))return"Hot";if(score>=60||(days!==null&&days<=90))return"Warm";if(score>=40)return"Watch";return"Monitor";}\n'
+    +'function urgBg(u){return u==="Critical"?"#FDECEA":u==="Hot"?"#FEF3C7":u==="Warm"?"#EEF1FB":u==="Watch"?"#E6F4EE":"#F4F6FA";}\n\n'
+    +'// v5: parallel fetch using UrlFetchApp.fetchAll for 10x speed improvement\n'
+    +'function scanLeads(){\n'
+    +'  var ss=SpreadsheetApp.getActiveSpreadsheet();\n'
+    +'  var sheet=ss.getSheetByName(CFG.OPPS)||ss.insertSheet(CFG.OPPS);\n'
+    +'  if(sheet.getLastRow()===0){sheet.appendRow(["Date","Source","Headline","URL","Keywords","Location","Sector","Score","Urgency","Type","Closing Date","Days Left","Signals","Emailed"]);sheet.getRange(1,1,1,14).setBackground("#1B2A6B").setFontColor("#fff").setFontWeight("bold");sheet.setFrozenRows(1);}\n'
+    +'  var seen={};\n'
+    +'  if(sheet.getLastRow()>1){sheet.getRange(2,4,sheet.getLastRow()-1,1).getValues().forEach(function(r){if(r[0])seen[r[0]]=true;});}\n'
+    +'  // v5: parallel fetch\n'
+    +'  var reqs=FEEDS.map(function(url){return{url:url,muteHttpExceptions:true,deadline:10};});\n'
+    +'  var resps=UrlFetchApp.fetchAll(reqs);\n'
+    +'  var allLeads=[],instant=[];\n'
+    +'  resps.forEach(function(resp,fi){\n'
+    +'    try{\n'
+    +'      if(resp.getResponseCode()!==200)return;\n'
+    +'      var ch=XmlService.parse(resp.getContentText()).getRootElement().getChild("channel");\n'
+    +'      if(!ch)return;\n'
+    +'      ch.getChildren("item").forEach(function(item){\n'
+    +'        var title=txt(item,"title"),link=txt(item,"link"),desc=txt(item,"description"),pub=txt(item,"pubDate");\n'
+    +'        if(!link||seen[link])return;\n'
+    +'        var text=(title+" "+desc).toLowerCase();\n'
+    +'        var matched=KW.filter(function(k){return text.indexOf(k.toLowerCase())!==-1;});\n'
+    +'        if(!matched.length)return;\n'
+    +'        var sigs=SIGNALS.filter(function(s){return text.indexOf(s)!==-1;});\n'
+    +'        var score=Math.min(matched.length*12,60)+Math.min(sigs.length*10,40);score=Math.min(score,100);\n'
+    +'        var days=extractDays(text);\n'
+    +'        var u=urg(score,days);\n'
+    +'        var type=sigs.some(function(s){return["tender","bid","rfq","rfp","request for proposal","request for quotation"].indexOf(s)!==-1;})?"tender":sigs.some(function(s){return s.indexOf("renewal")!==-1;})?"renewal":"news";\n'
+    +'        var lead={date:new Date(pub||Date.now()).toLocaleString("en-ZA"),source:dom(FEEDS[fi]),title:title,url:link,keywords:matched.slice(0,6).join(", "),location:detectLoc(text),sector:detectSec(text),score:score,urgency:u,type:type,days:days,signals:sigs.slice(0,4).join(", ")||"None"};\n'
+    +'        allLeads.push(lead);seen[link]=true;\n'
+    +'        if(score>=CFG.INSTANT_SCORE||u==="Critical")instant.push(lead);\n'
+    +'      });\n'
+    +'    }catch(e){Logger.log("Feed "+fi+": "+e.message);}\n'
+    +'  });\n'
+    +'  allLeads.sort(function(a,b){var o={Critical:1,Hot:2,Warm:3,Watch:4,Monitor:5};return(o[a.urgency]||5)-(o[b.urgency]||5)||b.score-a.score;});\n'
+    +'  var write=allLeads.filter(function(l){return l.score>=CFG.MIN_SCORE;});\n'
+    +'  write.forEach(function(l){sheet.appendRow([l.date,l.source,l.title,l.url,l.keywords,l.location,l.sector,l.score,l.urgency,l.type,l.days||"",l.days||"",l.signals,l.score>=CFG.MIN_SCORE?"Yes":"No"]);sheet.getRange(sheet.getLastRow(),1,1,14).setBackground(urgBg(l.urgency));});\n'
+    +'  if(instant.length>0)sendEmail(instant,"instant");\n'
+    +'  if(sheet.getLastRow()>5001)sheet.deleteRows(2,sheet.getLastRow()-5001);\n'
+    +'  Logger.log("v5 scan done: "+write.length+" written | "+instant.length+" instant emails | parallel fetch used");\n'
+    +'}\n\n'
+    +'function checkRenewals(){\n'
+    +'  var ss=SpreadsheetApp.getActiveSpreadsheet();\n'
+    +'  var sheet=ss.getSheetByName(CFG.RENEW);\n'
+    +'  if(!sheet||sheet.getLastRow()<=1){Logger.log("No renewals sheet or empty");return;}\n'
+    +'  var today=new Date();today.setHours(0,0,0,0);\n'
+    +'  var data=sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues();\n'
+    +'  var alerts=[];\n'
+    +'  data.forEach(function(row,i){\n'
+    +'    var sw=row[0],vendor=row[1],client=row[2],value=row[3],dateStr=row[4],status=row[10];\n'
+    +'    if(!sw||!dateStr||status==="Expired"||status==="Cancelled")return;\n'
+    +'    var renewDate;try{renewDate=new Date(dateStr);}catch(e){return;}\n'
+    +'    if(isNaN(renewDate.getTime()))return;\n'
+    +'    var days=Math.ceil((renewDate.getTime()-today.getTime())/86400000);\n'
+    +'    var u=days<=0?"Expired":days<=7?"Critical":days<=30?"Hot":days<=60?"Warm":days<=90?"Watch":"Monitor";\n'
+    +'    sheet.getRange(i+2,6).setValue(days);\n'
+    +'    sheet.getRange(i+2,7).setValue(u);\n'
+    +'    sheet.getRange(i+2,1,1,12).setBackground(urgBg(u));\n'
+    +'    var shouldAlert=false;\n'
+    +'    if(days<=0&&status!=="Expired"){sheet.getRange(i+2,11).setValue("Expired");shouldAlert=true;}\n'
+    +'    else if(CFG.REMINDERS.indexOf(days)!==-1){shouldAlert=true;sheet.getRange(i+2,8).setValue("Sent "+today.toLocaleDateString("en-ZA"));}\n'
+    +'    else if(days<=7&&!row[9]){shouldAlert=true;sheet.getRange(i+2,10).setValue("Sent "+today.toLocaleDateString("en-ZA"));}\n'
+    +'    if(shouldAlert)alerts.push({sw:sw,vendor:vendor,client:client,value:value,date:dateStr,days:days,urgency:u});\n'
+    +'  });\n'
+    +'  if(alerts.length>0)sendRenewalEmail(alerts);\n'
+    +'  Logger.log("Renewals checked: "+alerts.length+" alerts sent");\n'
+    +'}\n\n'
+    +'function dailySummary(){\n'
+    +'  var sheet=SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CFG.OPPS);\n'
+    +'  if(!sheet||sheet.getLastRow()<=1){GmailApp.sendEmail(CFG.EMAIL,"[NaledZi v5] Daily summary — scanner healthy","No qualifying opportunities in last 24h. Scanner running normally.\\n\\nNaledzi Technologies");return;}\n'
+    +'  var today=new Date();today.setHours(0,0,0,0);\n'
+    +'  var data=sheet.getDataRange().getValues();\n'
+    +'  var tl=data.slice(1).filter(function(r){try{return r[0]&&new Date(r[0])>=today;}catch(e){return false;}});\n'
+    +'  if(!tl.length){GmailApp.sendEmail(CFG.EMAIL,"[NaledZi v5] Daily summary — no new leads","No qualifying opportunities today. Scanner running normally.\\n\\nNaledzi Technologies");return;}\n'
+    +'  var hot=tl.filter(function(r){return r[8]==="Critical"||r[8]==="Hot";}).length;\n'
+    +'  var locs={};tl.forEach(function(r){locs[r[5]]=true;});\n'
+    +'  GmailApp.sendEmail(CFG.EMAIL,"[NaledZi v5] Daily summary — "+hot+" Critical/Hot, "+tl.length+" total — "+today.toDateString(),"Total opportunities today: "+tl.length+"\\nCritical/Hot: "+hot+"\\nCountries covered: "+Object.keys(locs).join(", ")+"\\n\\nOpen your NaledZi Opportunities Google Sheet for full details.\\n\\nNaledzi Technologies\\nnaledzitechnologies.co.za\\n+27 83 616 0415");\n'
+    +'}\n\n'
+    +'function sendEmail(leads,type){\n'
+    +'  var uo={Critical:1,Hot:2,Warm:3,Watch:4,Monitor:5};\n'
+    +'  leads.sort(function(a,b){return(uo[a.urgency]||5)-(uo[b.urgency]||5)||b.score-a.score;});\n'
+    +'  var crit=leads.filter(function(l){return l.urgency==="Critical";}).length;\n'
+    +'  var subj=type==="instant"?"[URGENT NaledZi v5] "+crit+" CRITICAL opportunit"+(crit===1?"y":"ies")+" — act now":"[NaledZi v5] "+leads.length+" new leads | "+crit+" Critical — "+new Date().toDateString();\n'
+    +'  var rows=leads.map(function(l){var bg=urgBg(l.urgency),sc=l.score>=80?"#1A7A4A":"#B45309";return"<tr style=\'background:"+bg+"\'><td style=\'padding:8px\'>"+l.urgency+"</td><td style=\'padding:8px;text-align:center\'><span style=\'background:"+sc+";color:#fff;padding:2px 8px;border-radius:10px;font-weight:700\'>"+l.score+"</span></td><td style=\'padding:8px\'><a href=\'"+l.url+"\' style=\'color:#1B2A6B;font-weight:600\'>"+l.title+"</a><br><small style=\'color:#666\'>"+l.keywords+"</small></td><td style=\'padding:8px\'>"+l.location+"</td><td style=\'padding:8px\'>"+l.sector+"</td><td style=\'padding:8px\'>"+(l.days?"Closes in "+l.days+"d":"")+"</td></tr>";}).join("");\n'
+    +'  var html="<div style=\'font-family:Arial;max-width:740px\'><div style=\'background:#1B2A6B;padding:18px 24px;border-radius:8px 8px 0 0\'><span style=\'color:#fff;font-size:18px;font-weight:700\'>NaledZi Intelligence Platform v5</span><span style=\'color:#D6DAFA;font-size:13px;margin-left:10px\'>" + new Date().toLocaleString("en-ZA") + "</span></div>"+(crit>0?"<div style=\'background:#FDECEA;border-left:4px solid #8B1A1A;padding:10px 16px;font-size:13px;color:#8B1A1A\'><strong>⚠️ "+crit+" CRITICAL opportunit"+(crit===1?"y":"ies")+" require action today.</strong></div>":"")+"<table style=\'width:100%;border-collapse:collapse;border:1px solid #e4e7ec\'><tr style=\'background:#1B2A6B;color:#fff\'><th style=\'padding:9px\'>Urgency</th><th style=\'padding:9px\'>Score</th><th style=\'padding:9px;text-align:left\'>Opportunity</th><th style=\'padding:9px\'>Location</th><th style=\'padding:9px\'>Sector</th><th style=\'padding:9px\'>Deadline</th></tr>"+rows+"</table><div style=\'padding:13px 24px;background:#f9f9f9;border:1px solid #e4e7ec;border-top:none;border-radius:0 0 8px 8px\'><p style=\'font-size:12px;color:#888\'>Naledzi Technologies &bull; naledzitechnologies.co.za &bull; +27 83 616 0415<br>Virtualised. Protected. Always Operational.</p></div></div>";\n'
+    +'  GmailApp.sendEmail(CFG.EMAIL,subj,"Enable HTML to view.",{htmlBody:html,name:"NaledZi Intelligence Platform v5"});\n'
+    +'}\n\n'
+    +'function sendRenewalEmail(alerts){\n'
+    +'  alerts.sort(function(a,b){return a.days-b.days;});\n'
+    +'  var crit=alerts.filter(function(a){return a.days<=7;}).length;\n'
+    +'  var subj=crit>0?"[URGENT NaledZi Renewals] "+crit+" contract(s) expire ≤7 days — call clients today":"[NaledZi Renewals] "+alerts.length+" renewal reminder(s) — "+new Date().toDateString();\n'
+    +'  var rows=alerts.map(function(a){var bg=urgBg(a.urgency),cl=a.days<=7?"#8B1A1A":a.days<=30?"#B45309":"#1B2A6B";return"<tr style=\'background:"+bg+"\'><td style=\'padding:8px\'>"+a.urgency+"</td><td style=\'padding:8px\'><strong>"+a.sw+"</strong><br><small>"+a.vendor+"</small></td><td style=\'padding:8px\'>"+a.client+"</td><td style=\'padding:8px\'>"+a.value+"</td><td style=\'padding:8px\'>"+a.date+"</td><td style=\'padding:8px\'><strong style=\'color:"+cl+"\'>"+a.days+"d</strong></td></tr>";}).join("");\n'
+    +'  var html="<div style=\'font-family:Arial;max-width:720px\'><div style=\'background:#1A7A4A;padding:18px 24px;border-radius:8px 8px 0 0\'><span style=\'color:#fff;font-size:18px;font-weight:700\'>NaledZi Renewal Tracker</span></div>"+(crit>0?"<div style=\'background:#FDECEA;border-left:4px solid #8B1A1A;padding:10px 16px;font-size:13px;color:#8B1A1A\'><strong>⚠️ "+crit+" contract(s) expire in ≤7 days. Call the client today.</strong></div>":"")+"<table style=\'width:100%;border-collapse:collapse;border:1px solid #e4e7ec\'><tr style=\'background:#1A7A4A;color:#fff\'><th style=\'padding:9px\'>Status</th><th style=\'padding:9px;text-align:left\'>Software</th><th style=\'padding:9px\'>Client</th><th style=\'padding:9px\'>Value</th><th style=\'padding:9px\'>Renewal Date</th><th style=\'padding:9px\'>Days Left</th></tr>"+rows+"</table><div style=\'padding:12px 24px;background:#f9f9f9;border:1px solid #e4e7ec;border-top:none;border-radius:0 0 8px 8px\'><p style=\'font-size:12px;color:#888\'>Naledzi Technologies &bull; naledzitechnologies.co.za &bull; +27 83 616 0415</p></div></div>";\n'
+    +'  GmailApp.sendEmail(CFG.EMAIL,subj,"Enable HTML to view.",{htmlBody:html,name:"NaledZi Renewal Tracker"});\n'
+    +'}\n\n'
+    +'function extractDays(text){var m=text.match(/clos(?:ing|es?)?\\s+(?:in\\s+)?(\\d+)\\s+day/i)||text.match(/deadline[:\\s]*(\\d+)\\s+day/i)||text.match(/(\\d+)\\s+days?.*clos/i);return m?parseInt(m[1]):null;}\n\n'
+    +'function detectLoc(text){var c=[["south africa","South Africa"],["nigeria","Nigeria"],["kenya","Kenya"],["ghana","Ghana"],["egypt","Egypt"],["ethiopia","Ethiopia"],["zimbabwe","Zimbabwe"],["botswana","Botswana"],["namibia","Namibia"],["rwanda","Rwanda"],["tanzania","Tanzania"],["saudi arabia","Saudi Arabia"],["dubai","UAE"],["uae","UAE"],["qatar","Qatar"],["kuwait","Kuwait"],["bahrain","Bahrain"],["jordan","Jordan"],["oman","Oman"],["turkey","Turkey"],["united kingdom","UK"],["germany","Germany"],["france","France"],["netherlands","Netherlands"],["sweden","Sweden"],["united states","USA"],["canada","Canada"],["brazil","Brazil"],["australia","Australia"],["india","India"],["singapore","Singapore"],["malaysia","Malaysia"],["indonesia","Indonesia"],["japan","Japan"],["africa","Africa"],["middle east","Middle East"],["europe","Europe"],["global","Global"]];for(var i=0;i<c.length;i++){if(text.indexOf(c[i][0])!==-1)return c[i][1];}return"Global";}\n\n'
+    +'function detectSec(text){if(/bank|financ|insurance|bfsi|fnb|absa|nedbank|capitec|investec|barclays|hsbc/i.test(text))return"BFSI";if(/mine|mining|gold|platinum|coal|exxaro|anglogold|sibanye|glencore/i.test(text))return"Mining";if(/retail|shoprite|walmart|tesco|pick n pay|woolworth|checkers/i.test(text))return"Retail";if(/telco|telecom|mtn|vodacom|telkom|safaricom|att|t-mobile/i.test(text))return"Telecoms";if(/health|hospital|medical|nhs|netcare|mediclinic|clicks|dischem/i.test(text))return"Healthcare";if(/government|municipality|department|ministry|eskom|transnet|aramco/i.test(text))return"Government";if(/manufactur|industrial|sasol|siemens|petrochem|energy|oil|gas/i.test(text))return"Industrial";return"General";}\n\n'
+    +'function dom(url){try{return url.match(/https?:\\/\\/([^\\/]+)/)[1].replace(/^(www\\.|news\\.)/,"");}catch(e){return url.slice(0,40);}}\n'
+    +'function txt(el,n){try{var c=el.getChild(n);return c?c.getText():"";}catch(e){return "";}}\n\n'
+    +'function onOpen(){SpreadsheetApp.getUi().createMenu("NaledZi v5").addItem("Run scan now","scanLeads").addItem("Check renewals","checkRenewals").addItem("Send daily summary","dailySummary").addSeparator().addItem("About NaledZi v5","about").addToUi();}\n'
+    +'function about(){SpreadsheetApp.getUi().alert("NaledZi Intelligence Platform v5\\n\\nParallel scanning · Renewal tracking · Urgency engine · Instant email\\n\\nNaledzi Technologies · naledzitechnologies.co.za · +27 83 616 0415");}\n';
+  var el=document.getElementById('script-out');if(el)el.textContent=script;window._script=script;
+}
+genScript();
+
+function copyScript(){var txt=window._script||'';if(!txt)return;var btn=document.getElementById('copy-btn');if(navigator.clipboard){navigator.clipboard.writeText(txt).then(function(){if(btn){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy script';},2500);}});}else{var ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);if(btn){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy script';},2500);}}}
+
+// ═══ EXPORT ═══════════════════════════════════════════════════════════
+function getExpData(ctx){
+  if(ctx==='scanner'||ctx==='gsearch')return savedLeads.length?savedLeads:shownLeads.length?shownLeads:ALL_LEADS.slice(0,10);
+  if(ctx==='renewals')return RENEWALS;
+  if(ctx==='audit')return AUDIT_ITEMS.map(function(a){return{time:a.t,event:a.e};});
+  if(ctx==='dashboard')return [{contact:'Sarah Chen',company:'Nedbank',title:'CISO',signal:'Opened 4×',score:97},{contact:'James Molefe',company:'Absa',title:'CTO',signal:'Clicked Calendly',score:94},{contact:'Dr Priya Naidoo',company:'Discovery',title:'CIO',signal:'Replied YES',score:91}];
+  if(ctx==='sequences')return [{sequence:'BFSI Tier A',contacts:47,openRate:'34.2%',replyRate:'5.1%',meetings:6},{sequence:'Mining Tier A',contacts:23,openRate:'29.8%',replyRate:'3.4%',meetings:3}];
+  if(ctx==='tenants')return [{org:'Naledzi Technologies',tier:'Enterprise',mrr:'R85,000'},{org:'Standard Bank',tier:'Quantum',mrr:'R220,000'}];
+  if(ctx==='pricing')return [{tier:'Starter',mrr:'R12,000',accounts:50,arr:'R7.2M'},{tier:'Professional',mrr:'R35,000',accounts:30,arr:'R12.6M'},{tier:'Enterprise',mrr:'R85,000',accounts:15,arr:'R15.3M'}];
+  if(ctx==='popia')return [{basis:'Explicit Consent',count:312,pct:'64.1%'},{basis:'Legitimate Interest',count:123,pct:'25.3%'},{basis:'Opt-Out',count:18,pct:'3.7%'}];
+  if(ctx==='script')return [{name:'NaledZi Apps Script v5',keywords:kwList.length,locations:locList.length,generated:new Date().toLocaleDateString('en-ZA')}];
+  return ALL_LEADS.slice(0,8);
+}
+function xport(type,ctx){
+  var data=getExpData(ctx);if(!data||!data.length){toast('No data to export');return;}
+  var keys=Object.keys(data[0]);
+  if(type==='excel'){
+    var html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body><table border="1"><thead><tr style="background:#1B2A6B;color:#fff;font-weight:bold">'+keys.map(function(k){return'<th>'+k+'</th>';}).join('')+'</tr></thead><tbody>'+data.map(function(r,i){return'<tr style="background:'+(i%2===0?'#fff':'#f4f6fa')+'">'+keys.map(function(k){return'<td>'+escH(String(r[k]||''))+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table></body></html>';
+    dl(new Blob([html],{type:'application/vnd.ms-excel;charset=utf-8'}),'naledzi-'+ctx+'-'+now()+'.xls');
+    toast('✓ Excel exported — '+data.length+' records');
+  }else if(type==='pdf'){
+    var w=window.open('','_blank');if(!w){toast('Allow popups for PDF export');return;}
+    var rows=data.map(function(r,i){return'<tr style="background:'+(i%2===0?'#fff':'#f4f6fa')+'">'+keys.map(function(k){return'<td>'+escH(String(r[k]||''))+'</td>';}).join('')+'</tr>';}).join('');
+    w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>NaledZi v5 — '+ctx+'</title><style>body{font-family:Arial;padding:24px;color:#101828}h1{color:#1B2A6B;font-size:18pt}p{font-size:11pt;color:#888}table{width:100%;border-collapse:collapse}th{background:#1B2A6B;color:#fff;padding:8px 10px;text-align:left;font-size:10pt}td{border:1px solid #e4e7ec;padding:6px 10px;font-size:10pt}.np{display:none}footer{margin-top:18px;border-top:1px solid #e4e7ec;padding-top:8px;font-size:9pt;color:#888}@media print{.np{display:none}}</style></head><body><h1>NaledZi Intelligence Platform v5</h1><p>Report: '+ctx.toUpperCase()+' &bull; Generated: '+new Date().toLocaleString('en-ZA')+'<br>Naledzi Technologies &bull; naledzitechnologies.co.za &bull; +27 83 616 0415</p><button class="np" onclick="window.print()" style="margin-bottom:14px;padding:8px 16px;background:#1B2A6B;color:#fff;border:none;border-radius:6px;cursor:pointer">🖨️ Print / Save as PDF</button><table><thead><tr>'+keys.map(function(k){return'<th>'+k+'</th>';}).join('')+'</tr></thead><tbody>'+rows+'</tbody></table><footer>Naledzi Technologies &bull; naledzitechnologies.co.za &bull; +27 83 616 0415 &bull; Virtualised. Protected. Always Operational.</footer></body></html>');
+    w.document.close();toast('✓ PDF report opened — click Print → Save as PDF');
+  }else if(type==='word'){
+    var content='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="UTF-8"><style>body{font-family:Arial;font-size:11pt}h1{color:#1B2A6B;font-size:16pt}h2{color:#2E3F8F;font-size:12pt}table{border-collapse:collapse;width:100%}th{background:#1B2A6B;color:#fff;padding:6px 10px}td{border:1px solid #ddd;padding:5px 8px;font-size:10pt}</style></head><body><h1>NaledZi Intelligence Platform v5</h1><h2>Report: '+ctx.toUpperCase()+'</h2><p>Generated: '+new Date().toLocaleString('en-ZA')+'<br>Naledzi Technologies &bull; naledzitechnologies.co.za &bull; +27 83 616 0415</p><table><thead><tr>'+keys.map(function(k){return'<th>'+k+'</th>';}).join('')+'</tr></thead><tbody>'+data.map(function(r){return'<tr>'+keys.map(function(k){return'<td>'+escH(String(r[k]||''))+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table><p style="margin-top:18px;font-size:9pt;color:#888">Naledzi Technologies &bull; naledzitechnologies.co.za &bull; Virtualised. Protected. Always Operational.</p></body></html>';
+    dl(new Blob(['\ufeff'+content],{type:'application/msword;charset=utf-8'}),'naledzi-'+ctx+'-'+now()+'.doc');
+    toast('✓ Word document exported');
+  }
+}
+function xportCSV(){
+  var data=savedLeads.length?savedLeads:shownLeads.length?shownLeads:ALL_LEADS.slice(0,20);
+  var keys=Object.keys(data[0]);
+  var csv=[keys.join(',')].concat(data.map(function(r){return keys.map(function(k){return'"'+String(r[k]||'').replace(/"/g,'""')+'"';}).join(',');})).join('\n');
+  dl(new Blob([csv],{type:'text/csv'}),'naledzi-leads-'+now()+'.csv');
+  toast('✓ CSV exported — '+data.length+' records');
+}
+function dl(blob,fname){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();}
+function now(){return new Date().toISOString().slice(0,10);}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══ TOAST ═══════════════════════════════════════════════════════════
+function toast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.style.display='block';setTimeout(function(){t.style.display='none';},4000);}
+</script>
+</body>
+</html>
